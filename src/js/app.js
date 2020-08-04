@@ -9,7 +9,7 @@ import decorations from './decorations'
 import facilityStyle from './facility-style'
 import poletop from './poletop'
 import Cluster from 'ol/source/Cluster'
-import {getCenter as olExtentGetCenter} from 'ol/extent'
+import {ExtentGetCenter} from 'ol/extent'
 
 class App extends FinderApp {
 	/**
@@ -25,7 +25,7 @@ class App extends FinderApp {
         y: 'y',
         dataProjection: 'EPSG:2263'
       }),
-			facilityStyle: facilityStyle.pointStyle,
+			facilityStyle,
 			decorations: [decorations],
 			facilityUrl: poletop.PUBLIC_DATA_URL,
 			facilityTabTitle: 'Locations',
@@ -33,23 +33,6 @@ class App extends FinderApp {
 			geoclientUrl: poletop.GEOCLIENT_URL,
 			directionsUrl: poletop.DIRECTIONS_URL
 		})
-	}
-	ready(feats) {
-		super.ready(feats)
-		const pop = this.popup
-		pop.showFeatures = (features, coordinate) => {
-			let clusteredFeatures = []
-			features.forEach(feature => {
-				const more = feature.get('features')
-				if (more) {
-					clusteredFeatures = clusteredFeatures.concat(more)
-				}
-			})
-			features = clusteredFeatures.length ? clusteredFeatures : features
-			coordinate = coordinate || olExtentGetCenter(features[0].getGeometry().getExtent())
-			pop.pager.show(features)
-			pop.show({coordinate})
-		}
 	}
   createSource(options) {
 		this.notClusteredSrc = super.createSource(options)
@@ -65,7 +48,7 @@ class App extends FinderApp {
 	decorateClusteredFeatures() {
 		this.clusteredSrc.getFeatures().forEach(feature => {
 			feature.getTip = () => {
-				return 'hello'
+				return feature.get('features').length + ' poletop devices'
 			}
 		})
 	}
@@ -79,6 +62,26 @@ class App extends FinderApp {
 		if (previousSrc !== this.source) {
 			this.layer.setSource(this.source)
 			this.resetList()
+		}
+	}
+	ready(feats) {
+		super.ready(feats)
+		this.hackPopup()
+	}
+	hackPopup() {
+		const pop = this.popup
+		pop.showFeatures = (features, coordinate) => {
+			let clusteredFeatures = []
+			features.forEach(feature => {
+				const more = feature.get('features')
+				if (more) {
+					clusteredFeatures = clusteredFeatures.concat(more)
+				}
+			})
+			features = clusteredFeatures.length ? clusteredFeatures : features
+			coordinate = coordinate || ExtentGetCenter(features[0].getGeometry().getExtent())
+			pop.pager.show(features)
+			pop.show({coordinate})
 		}
 	}
 }

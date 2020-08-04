@@ -56,7 +56,7 @@ const decorations = {
 	getAdvisories() {
 		const advCols = {
 			bid_advisory: 'Business Improvement District',
-			historic_advisory: 'Landmark/Historic',
+			scenic_landmark_advisory: 'Landmark/Historic',
 			nysdot_advisory: 'NYS DOT',
 			park_advisory: 'Parks',
 			port_auth_advisory: 'Port Authority',
