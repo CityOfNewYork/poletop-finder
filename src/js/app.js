@@ -9,7 +9,7 @@ import decorations from './decorations'
 import facilityStyle from './facility-style'
 import poletop from './poletop'
 import Cluster from 'ol/source/Cluster'
-import {ExtentGetCenter} from 'ol/extent'
+import {getCenter} from 'ol/extent'
 
 class App extends FinderApp {
 	/**
@@ -27,7 +27,7 @@ class App extends FinderApp {
       }),
 			facilityStyle,
 			decorations: [decorations],
-			facilityUrl: poletop.PUBLIC_DATA_URL,
+			facilityUrl: poletop.CSV_DATA_URL,
 			facilityTabTitle: 'Locations',
 			facilitySearch: { displayField: 'search_label', nameField: 'search_name' },
 			geoclientUrl: poletop.GEOCLIENT_URL,
@@ -54,7 +54,7 @@ class App extends FinderApp {
 	}
 	cluster() {
 		const previousSrc = this.source
-		if (this.view.getZoom() < 12) {
+		if (this.view.getZoom() < 11) {
 			this.source = this.clusteredSrc
 		} else {
 			this.source = this.notClusteredSrc
@@ -90,7 +90,7 @@ class App extends FinderApp {
 				}
 			})
 			features = clusteredFeatures.length ? clusteredFeatures : features
-			coordinate = coordinate || ExtentGetCenter(features[0].getGeometry().getExtent())
+			coordinate = coordinate || getCenter(features[0].getGeometry().getExtent())
 			pop.pager.show(features)
 			pop.show({coordinate})
 		}
