@@ -64,6 +64,17 @@ class App extends FinderApp {
 			this.resetList()
 		}
 	}
+	resetList(event) {
+    const coordinate = this.location.coordinate
+    this.popup.hide()
+    if (this.pager) {
+      if (coordinate) {
+        this.pager.reset(this.notClusteredSrc.sort(coordinate))
+      } else {
+        this.pager.reset(this.notClusteredSrc.getFeatures())
+      }
+    }
+  }
 	ready(feats) {
 		super.ready(feats)
 		this.hackPopup()

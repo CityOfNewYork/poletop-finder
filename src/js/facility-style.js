@@ -7,7 +7,7 @@ import poletop from './poletop'
 
 const style = (feature, resolution) => {
   const features = feature.get('features')
-  let radius = 10
+  let radius = 7
   let text
   if (features) {
     const size = features.length
