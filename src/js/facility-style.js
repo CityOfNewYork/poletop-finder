@@ -12,6 +12,9 @@ const style = (feature, resolution) => {
   if (features) {
     const size = features.length
     radius = size / poletop.CLUSTER_RADIUS_DENOMINATOR
+    if (radius < 7) {
+      radius = 7
+    }
     text = new Text({
       text: size.toString(),
       fill: new Fill({
