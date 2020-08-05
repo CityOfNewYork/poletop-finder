@@ -1,0 +1,11 @@
+.fnd #banner {
+    background-image: url(../img/doitt-logo-solid.svg);
+    background-size: 197px;
+    background-position: -35px -55px;
+    padding-left: 125px;
+}
+
+.fnd #home:focus svg {
+    transform: scale(0.34);
+    margin-left: -46.5px;
+}

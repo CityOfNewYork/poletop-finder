@@ -26,7 +26,7 @@ const style = (feature, resolution) => {
     image: new Circle({
       radius: radius,
       stroke: new Stroke({
-        color: '#fff',
+        color: '#404040',
       }),
       fill: new Fill({
         color: '#3399CC',
