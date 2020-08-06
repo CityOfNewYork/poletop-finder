@@ -87,7 +87,11 @@ const pole = {
 		return this.get('pole_type')
 	},
 	getZone() {
-		return this.get('zone')
+		return {
+			'A': 'A - Manhattan South of 96th Street',
+			'B': 'B - All boroughs excluding those areas in Zones A and C',
+			'C': 'C - Parts of Harlem, the South Bronx and East New York (Brooklyn)',
+		}[this.get('zone')]
 	},
 	getCouncilDistrict() {
 		return this.get('council_district')
@@ -130,7 +134,6 @@ const pole = {
 		const ul = $('<ul class="adv"></ul>')
 		Object.keys(messages).forEach(col => {
 			const value = this.get(col)
-			console.warn(value);
 			if (value) {
 				ul.append(`<li>${this.replace(messages[col], {value})}</li>`)
 			}
