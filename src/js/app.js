@@ -33,10 +33,7 @@ class App extends FinderApp {
 			facilityStyle,
 			facilityTabTitle: 'Locations',
 			geoclientUrl: poletop.GEOCLIENT_URL,
-			splashOptions: {
-				message: poletop.SPLASH_MESSAGE,
-				buttonText: ['Screen reader instructions', 'View map']
-			},
+			splashOptions: App.getSplashOptions(document.location.search),
 			filterChoiceOptions: [{
 				title: 'Equipment Installed',
 				choices: [
@@ -143,4 +140,12 @@ class App extends FinderApp {
   }
 }
 
+App.getSplashOptions = (search) => {
+	if (search.indexOf('splash=false') === -1) {
+		return {
+			message: poletop.SPLASH_MESSAGE,
+			buttonText: ['Screen reader instructions', 'View map']
+		}
+	}
+}
 export default App
