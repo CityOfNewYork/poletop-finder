@@ -4,8 +4,16 @@
     background-position: -35px -55px;
     padding-left: 125px;
 }
-
 .fnd #home:focus svg {
     transform: scale(0.34);
     margin-left: -46.5px;
+}
+.facility ul {
+    margin: 0;
+}
+.facility li {
+    margin-left: -15px;
+}
+.facility ul li ul li {
+    font-size: 14px;
 }

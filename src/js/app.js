@@ -103,6 +103,7 @@ class App extends FinderApp {
 				facilityUrl: this.getUrl(),
 				decorations: [decorations.common, decorations.pole],
 				facilityFormat: new CsvPoint({
+					id: 'id',
 					x: 'x_coord',
 					y: 'y_coord',
 					dataProjection: 'EPSG:2263'

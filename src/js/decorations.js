@@ -1,16 +1,26 @@
+import ReplaceTokens from 'nyc-lib/nyc/ReplaceTokens'
+import { wrapX } from 'ol/extent'
+
 const common = {
-	getCommunityBoard() {
+	getCommunityBoardNum() {
 		const cBoard = this.get('community_board').toString()
-		const boroCode = cBoard.substring(0,1)
-		const communityBoard = `${parseInt(cBoard.substring(1))}`
-		const boros = {
+		return `${parseInt(cBoard.substring(1))}`
+	},
+	getBoroNum() {
+		const cBoard = this.get('community_board').toString()
+		return cBoard.substring(0,1)
+	},
+	getBoroName() {
+		return {
 			'1': 'Manhattan',
 			'2': 'Bronx',
 			'3': 'Brooklyn',
 			'4': 'Queens',
 			'5': 'Staten Island'
-		}
-		return `${boros[boroCode]} Community Board ${communityBoard}`
+		}[this.getBoroNum()]
+	},
+	getCommunityBoardName() {
+		return `${this.getBoroName()} Community Board ${this.getCommunityBoardNum()}`
 	}
 }
 
@@ -24,7 +34,7 @@ const communityBoard = {
 			.append(this.zoomBtn())
 	},
 	getName() {
-		return $(`<div class="name">${this.getCommunityBoard()}</div>`)
+		return $(`<div class="name">${this.getCommunityBoardName()}</div>`)
 	},
 	zoomBtn() {
 		return $('<button class="btn rad-all">Show all poles</button>')
@@ -44,63 +54,85 @@ const communityBoard = {
 
 const pole = {
 	extendFeature() {
-		this.set(
-      'search_label',
-      `<strong><span class="srch-lbl-lg">${this.getName()}</span></strong><br><span class="srch-lbl-sm">${this.getAddress1(), this.getAddress2()}</span>`
-		)
-		this.set('search_name', `${this.getName()}, ${this.getAddress1()} ${this.getAddress2()}`)
+		this.replace = new ReplaceTokens().replace
 	},
-	getName() {
+	html() {
+    return $('<div class="facility"></div>')
+			.append(this.distanceHtml())
+			.append(this.nameHtml())
+			.append(this.distanceHtml(true))
+			.append(this.addressHtml())
+			.append(`<div><strong>Community Board: </strong>${this.getCommunityBoardNum()}</div>`)
+			.append(`<div><strong>Council District: </strong>${this.getCouncilDistrict()}</div>`)
+			.append(this.mapButton())
+			.append(this.directionsButton())
+			.append(this.detailsCollapsible())
+	},
+	getFranchisee() {
 		return this.get('franchisee')
 	},
+	getName() {
+		return `Poletop Reservation ID ${this.getId()}`
+	},
 	getAddress1() {
-		return `${this.get('on_street')}  between `
+		return `${this.get('on_street')}`
 	},
 	getAddress2() {
-		return `${this.get('cross_street_1')} and ${this.get('cross_street_2')}`
+		return `Between ${this.get('cross_street_1')} and ${this.get('cross_street_2')}`
 	},
 	getCityStateZip() {
 		return `${this.get('borough')}, NY ${this.get('zipcode')}`
 	},
-	getpoleType() {
+	getPoleType() {
 		return this.get('pole_type')
+	},
+	getZone() {
+		return this.get('zone')
 	},
 	getCouncilDistrict() {
 		return this.get('council_district')
 	},
+	reservationDate() {
+		return new Date(this.get('reservation_date').split('T')[0]).toLocaleDateString()
+	},
 	detailsHtml() {
-		const div = $('<div></div>')
 		const ul = $('<ul></ul>')
 
-		const communityBoard = `<li><strong>Community Board: </strong>${this.getCommunityBoard()}</li>`
-		const poleType = `<li><strong>Pole Type: </strong>${this.getpoleType()}</li>`
-		const councilDistrict = `<li><strong>Council District: </strong>${this.getCouncilDistrict()}</li>`
 		const advisories = this.getAdvisories()
 		
-		ul.append(communityBoard)
-		ul.append(poleType)
-		ul.append(councilDistrict)
-		if (advisories) {
-			ul.append($(`<li><strong>Proximity: </strong></li>`).append(this.getAdvisories()))
+		ul.append(`<li><strong>Ownership: </strong>${this.getPoleType()}</li>`)
+		ul.append(`<li><strong>Franchisee: </strong>${this.getFranchisee()}</li>`)
+		ul.append(`<li><strong>Franchise Contract Zone: </strong>${this.getZone()}</li>`)
+		ul.append(`<li><strong>Reservation Date: </strong>${this.reservationDate()}</li>`)
+		if (this.isInstalled()) {
+			ul.append('<li><strong>Equipment is installed</strong></li>')
+		} else {
+			ul.append('<li><strong>Equipment is not yet installed</strong></li>')
 		}
-		
-		return div.append(ul)
+		if (advisories) {
+			ul.append($(`<li><strong>Additional Notes: </strong></li>`).append(this.getAdvisories()))
+		}
+		return $('<div></div>').append(ul)
+	},
+	isInstalled() {
+		return this.get('equipment_installed_yes_no') === 'Y'
 	},
 	getAdvisories() {
-		const advCols = {
-			bid_advisory: 'Business Improvement District',
-			scenic_landmark_advisory: 'Landmark',
-			historic_advisory: 'Historic',
-			nysdot_advisory: 'NYS DOT',
-			park_advisory: 'Parks',
-			port_auth_advisory: 'Port Authority',
-			school_advisory: 'Schools'
+		const messages = {
+			park_advisory: 'Pole is located within ${value} under the jurisdiction of the Department of Parks and Recreation.',
+			historic_advisory: 'Pole is located near or within the ${value} under the jurisdiction of the Landmarks Preservation Commission.',
+			scenic_landmark_advisory: 'Pole is located adjacent to ${value} scenic landmark under the jurisdiction of the Landmarks Preservation Commission.',
+			bid_advisory: 'Pole is located within Business Improvement District ${value}.',
+			school_advisory: 'Pole is located within 20 feet of ${value}.'
+			// nysdot_advisory: 'NYS DOT',
+			// port_auth_advisory: 'Port Authority'
 		}
 		const ul = $('<ul class="adv"></ul>')
-		Object.keys(advCols).forEach(col => {
-			const adv = this.get(col)
-			if (adv) {
-				ul.append(`<li><strong>${advCols[col]}</strong>: ${adv}</li>`)
+		Object.keys(messages).forEach(col => {
+			const value = this.get(col)
+			console.warn(value);
+			if (value) {
+				ul.append(`<li>${this.replace(messages[col], {value})}</li>`)
 			}
 		})
 		if (ul.children().length) {

@@ -3,6 +3,7 @@ import Circle from 'ol/style/Circle'
 import Fill from 'ol/style/Fill'
 import Stroke from 'ol/style/Stroke'
 import Text from 'ol/style/Text'
+import Icon from 'ol/style/Icon'
 import poletop from './poletop'
 
 const style = (feature, resolution) => {
@@ -22,7 +23,7 @@ const style = (feature, resolution) => {
       }),
     })
   }
-  const style = new Style({
+  const style = [new Style({
     image: new Circle({
       radius: radius,
       stroke: new Stroke({
@@ -32,9 +33,17 @@ const style = (feature, resolution) => {
         color: 'rgba(51,153,204,.7)',
       }),
     })
-  })
+  })]
   if (text) {
-    style.setText(text)
+    style[0].setText(text)
+  } else if (feature.isInstalled()) {
+    style.push(new Style({
+      image: new Icon({
+        src: 'img/signal.svg',
+        imageSize: [512, 512],
+        scale: radius * 1.5 / 512
+      })
+    }))
   }
   return style
 }
