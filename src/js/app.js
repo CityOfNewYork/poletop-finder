@@ -99,7 +99,7 @@ class App extends FinderApp {
 				this.resetList()
 			}
 		} else {
-			this.source = super.createSource({
+			const poleSrc = super.createSource({
 				facilityUrl: this.getUrl(),
 				decorations: [decorations.common, decorations.pole],
 				facilityFormat: new CsvPoint({
@@ -108,8 +108,9 @@ class App extends FinderApp {
 					dataProjection: 'EPSG:2263'
 				})
 			})
-			this.source.autoLoad().then(() => {
-				this.layer.setSource(this.source)
+			poleSrc.autoLoad().then(() => {
+				this.source = poleSrc
+				this.layer.setSource(poleSrc)
 				this.resetListNoHidePopup()
 			})
 		}
