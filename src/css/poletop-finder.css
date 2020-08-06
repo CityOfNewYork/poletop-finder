@@ -1,29 +1,50 @@
 .fnd #banner {
-    background-image: url(../img/doitt-logo-solid.svg);
-    background-size: 197px;
-    background-position: -35px -55px;
-    padding-left: 125px;
+	background-image: url(../img/doitt-logo-solid.svg);
+	background-size: 197px;
+	background-position: -35px -55px;
+	padding-left: 125px;
 }
 .fnd #home:focus svg {
-    transform: scale(0.34);
-    margin-left: -46.5px;
+	transform: scale(0.34);
+	margin-left: -46.5px;
 }
 .facility ul {
-    margin: 0;
+	margin: 0;
 }
 .facility li {
-    margin-left: -15px;
+	margin-left: -15px;
 }
 .facility ul li ul li {
-    font-size: 14px;
+	font-size: 14px;
 }
 .fnd .splash .dia {
-    top: 20%;
+	top: 20%;
 }
 .fnd .facility button.btn.map {
-    width: calc(100% - 3px);
+	width: calc(100% - 3px);
 }
 .no-flt #filters,
 .no-flt .btns h2:nth-of-type(3) {
-    display: none;
+	display: none;
+}
+.chc-chc.equipment_installed_yes_no label[for=chc-chc-0]::before, .facility.equipment_installed_yes .name::before {
+	background-image: url(../img/signal.svg);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 16px;
+}
+
+.chc-chc.equipment_installed_yes_no label::before,.facility.equipment_installed_yes .name::before, .facility.equipment_installed_no .name::before {
+	display: inline-block;
+	width: 18px;
+	height: 18px;
+	border: 1px solid #fff;
+	content: ' ';
+	border-radius: 50%;
+	margin: 0 3px -4px -20px;
+	background-color: rgba(51,153,204,.7);
+}
+
+.chc-chc.equipment_installed_yes_no label, .facility.equipment_installed_yes .name, .facility.equipment_installed_no .name {
+	padding-left: 18px;
 }

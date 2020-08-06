@@ -56,8 +56,12 @@ const pole = {
 	extendFeature() {
 		this.replace = new ReplaceTokens().replace
 	},
+	cssClass() {
+		return this.isInstalled() ? 'equipment_installed_yes' : 'equipment_installed_no'
+	},
 	html() {
-    return $('<div class="facility"></div>')
+	return $('<div class="facility"></div>')
+			.addClass(this.cssClass())
 			.append(this.distanceHtml())
 			.append(this.nameHtml())
 			.append(this.distanceHtml(true))
