@@ -6,17 +6,17 @@ import Text from 'ol/style/Text'
 import poletop from './poletop'
 
 const style = (feature, resolution) => {
-  const features = feature.get('features')
   let radius = 7
   let text
-  if (features) {
-    const size = features.length
-    radius = size / poletop.CLUSTER_RADIUS_DENOMINATOR
+  if (feature.isCommunityBoard) {
+    const count = feature.getCount()
+    radius = count / window.CLUSTER_RADIUS_DENOMINATOR
     if (radius < 7) {
       radius = 7
     }
     text = new Text({
-      text: size.toString(),
+      text: `${count}`,
+      font: 'bold 9px sans-serif',
       fill: new Fill({
         color: '#fff',
       }),
@@ -26,10 +26,10 @@ const style = (feature, resolution) => {
     image: new Circle({
       radius: radius,
       stroke: new Stroke({
-        color: '#404040',
+        color: '#fff',
       }),
       fill: new Fill({
-        color: '#3399CC',
+        color: 'rgba(51,153,204,.7)',
       }),
     })
   })

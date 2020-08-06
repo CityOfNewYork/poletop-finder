@@ -8,8 +8,18 @@ import CsvPoint from 'nyc-lib/nyc/ol/format/CsvPoint'
 import decorations from './decorations'
 import facilityStyle from './facility-style'
 import poletop from './poletop'
-import Cluster from 'ol/source/Cluster'
+import GeoJSON from 'ol/format/GeoJSON'
 import {getCenter} from 'ol/extent'
+import fetchTimeout from 'nyc-lib/nyc/fetchTimeout'
+import SocrataJson from 'nyc-lib/nyc/ol/source/SocrataJson'
+import SocrataFormat from 'nyc-lib/nyc/ol/format/SocrataJson'
+import Decorate from 'nyc-lib/nyc/ol/format/Decorate'
+import {bbox} from 'ol/loadingstrategy'
+import {fromExtent as polygonFromExtent} from 'ol/geom/Polygon'
+import Vector from 'ol/source/Vector'
+import MapLocator from 'nyc-lib/nyc/ol/MapLocator'
+
+MapLocator.ZOOM_LEVEL = 14
 
 class App extends FinderApp {
 	/**
@@ -20,81 +30,100 @@ class App extends FinderApp {
 	constructor() {
 		super({
 			title: '4G Poletop Installation Locations',
-			facilityFormat: new CsvPoint({
-        x: 'x',
-        y: 'y',
-        dataProjection: 'EPSG:2263'
-      }),
 			facilityStyle,
-			decorations: [decorations],
-			facilityUrl: poletop.CSV_DATA_URL,
 			facilityTabTitle: 'Locations',
-			facilitySearch: { displayField: 'search_label', nameField: 'search_name' },
 			geoclientUrl: poletop.GEOCLIENT_URL,
 			directionsUrl: poletop.DIRECTIONS_URL
 		})
+		this.layer.setZIndex(5000)
+		this.view.on('change', $.proxy(this.cluster, this))
 	}
-  createSource(options) {
-		this.notClusteredSrc = super.createSource(options)
-		this.clusteredSrc = new Cluster({
-			distance: poletop.CLUSTER_DISTANCE,
-			source: this.notClusteredSrc
-		})
-		this.decorateClusteredFeatures()
-		this.clusteredSrc.on('change', $.proxy(this.decorateClusteredFeatures, this))
-		this.view.on('change:resolution', $.proxy(this.cluster, this))
-		return this.notClusteredSrc
+	zoomTo(feature) {
+    const popup = this.popup
+		if (!feature.isCommunityBoard) {
+			this.map.once('moveend', () => {
+				popup.showFeature(feature)
+			})
+		}
+    this.view.animate({
+      center: feature.getGeometry().getCoordinates(),
+      zoom: 14
+    })
+  }
+	showPoles(event) {
+		const feature = $(event.target).data('feature')
+		this.popup.hide()
+		this.zoomTo(feature)
 	}
-	decorateClusteredFeatures() {
-		this.clusteredSrc.getFeatures().forEach(feature => {
-			feature.getTip = () => {
-				return feature.get('features').length + ' poletop devices'
-			}
+	getUrl() {
+		const extent = this.view.calculateExtent(this.map.getSize())
+		console.warn(extent)
+		extent[0] = extent[0] - 500
+		extent[1] = extent[1] - 500
+		extent[2] = extent[2] + 500
+		extent[3] = extent[3] + 500
+		console.warn(extent)
+		const ext = polygonFromExtent(extent)
+      .transform('EPSG:3857', 'EPSG:2263')
+      .getExtent()
+			console.warn(ext)
+			const where = `x_coord > ${ext[0]} and x_coord < ${ext[2]} and y_coord > ${ext[1]} and y_coord < ${ext[3]}`
+		console.warn(where)
+		return `${poletop.POLE_DATA_URL}&$where=${encodeURIComponent(where)}`
+	}
+  createSource() {
+		const me = this
+		me.communityBoardCounts = {}
+		me.cdSrc = super.createSource({
+			facilityUrl: poletop.COMMUNITY_BOARD_URL,
+			decorations: [decorations.common, decorations.communityBoard],
+			facilityFormat: new CsvPoint({
+				x: 'x',
+				y: 'y',
+				dataProjection: 'EPSG:2263'
+			})
 		})
+		fetchTimeout(poletop.GROUPED_DATA_URL).then(response => {
+			response.text().then(csv => {
+				const rows = Papa.parse(csv, {header: true}).data
+				rows.forEach(row => {
+					me.communityBoardCounts[row.community_board] = row.count
+				})
+				me.layer.changed()
+			})
+		})
+		return me.cdSrc
 	}
 	cluster() {
-		const previousSrc = this.source
-		if (this.view.getZoom() < 11) {
-			this.source = this.clusteredSrc
+		if (this.view.getZoom() < poletop.CLUSTER_CUTOFF_ZOOM) {
+			const prevSrc = this.source
+			this.layer.setSource(this.cdSrc)
+			this.source = this.cdSrc
+			if (this.source !== prevSrc) {
+				this.resetList()
+			}
 		} else {
-			this.source = this.notClusteredSrc
-		}
-		if (previousSrc !== this.source) {
-			this.layer.setSource(this.source)
-			this.resetList()
-		}
-	}
-	resetList(event) {
-    const coordinate = this.location.coordinate
-    this.popup.hide()
-    if (this.pager) {
-      if (coordinate) {
-        this.pager.reset(this.notClusteredSrc.sort(coordinate))
-      } else {
-        this.pager.reset(this.notClusteredSrc.getFeatures())
-      }
-    }
-  }
-	ready(feats) {
-		super.ready(feats)
-		this.hackPopup()
-	}
-	hackPopup() {
-		const pop = this.popup
-		pop.showFeatures = (features, coordinate) => {
-			let clusteredFeatures = []
-			features.forEach(feature => {
-				const more = feature.get('features')
-				if (more) {
-					clusteredFeatures = clusteredFeatures.concat(more)
-				}
+			this.source = super.createSource({
+				facilityUrl: this.getUrl(),
+				decorations: [decorations.common, decorations.pole],
+				facilityFormat: new CsvPoint({
+					x: 'x_coord',
+					y: 'y_coord',
+					dataProjection: 'EPSG:2263'
+				})
 			})
-			features = clusteredFeatures.length ? clusteredFeatures : features
-			coordinate = coordinate || getCenter(features[0].getGeometry().getExtent())
-			pop.pager.show(features)
-			pop.show({coordinate})
+			this.source.autoLoad().then(() => {
+				this.layer.setSource(this.source)
+				this.resetListNoHidePopup()
+			})
 		}
 	}
+	resetListNoHidePopup(event) {
+    const hide = this.popup.hide
+    this.popup.hide = () => {}
+		super.resetList()
+    this.popup.hide = hide
+  }
 }
 
 export default App
