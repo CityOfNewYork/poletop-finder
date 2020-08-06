@@ -36,7 +36,14 @@ class App extends FinderApp {
 			splashOptions: {
 				message: poletop.SPLASH_MESSAGE,
 				buttonText: ['Screen reader instructions', 'View map']
-		},
+			},
+			filterChoiceOptions: [{
+				title: 'Equipment Installed',
+				choices: [
+					{name: 'equipment_installed_yes_no', values: ['Y'], label: 'Equipment is installed', checked: true},
+					{name: 'equipment_installed_yes_no', values: ['N'], label: 'Equipment is not yet installed', checked: true}
+				]
+			}]
 		})
 		this.layer.setZIndex(5000)
 		this.view.on('change', $.proxy(this.cluster, this))
@@ -101,6 +108,10 @@ class App extends FinderApp {
 			if (this.source !== prevSrc) {
 				this.resetList()
 			}
+			if (this.tabs.active.attr('id') === 'filters') {
+				this.tabs.open('#facilities')
+			}
+			$('#tabs').addClass('no-flt')
 		} else {
 			const poleSrc = super.createSource({
 				facilityUrl: this.getUrl(),
@@ -114,15 +125,20 @@ class App extends FinderApp {
 			})
 			poleSrc.autoLoad().then(() => {
 				this.source = poleSrc
+				$('#tabs').removeClass('no-flt')
+				this.filters.source = poleSrc
+				this.filters.filter()
 				this.layer.setSource(poleSrc)
-				this.resetListNoHidePopup()
+				this.resetList()
 			})
 		}
 	}
-	resetListNoHidePopup(event) {
+	resetList(event) {
     const hide = this.popup.hide
-    this.popup.hide = () => {}
-		super.resetList()
+		if (this.source !== this.cdSrc) {
+			this.popup.hide = () => {}
+		}
+		super.resetList(event)
     this.popup.hide = hide
   }
 }
