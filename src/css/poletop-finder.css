@@ -20,3 +20,6 @@
 .fnd .splash .dia {
     top: 20%;
 }
+.fnd .facility button.btn.map {
+    width: calc(100% - 3px);
+}

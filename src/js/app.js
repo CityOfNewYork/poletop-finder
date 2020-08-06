@@ -33,7 +33,6 @@ class App extends FinderApp {
 			facilityStyle,
 			facilityTabTitle: 'Locations',
 			geoclientUrl: poletop.GEOCLIENT_URL,
-			directionsUrl: poletop.DIRECTIONS_URL,
 			splashOptions: {
 				message: poletop.SPLASH_MESSAGE,
 				buttonText: ['Screen reader instructions', 'View map']

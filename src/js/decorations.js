@@ -65,7 +65,6 @@ const pole = {
 			.append(`<div><strong>Community Board: </strong>${this.getCommunityBoardNum()}</div>`)
 			.append(`<div><strong>Council District: </strong>${this.getCouncilDistrict()}</div>`)
 			.append(this.mapButton())
-			.append(this.directionsButton())
 			.append(this.detailsCollapsible())
 	},
 	getFranchisee() {
@@ -84,7 +83,10 @@ const pole = {
 		return `${this.get('borough')}, NY ${this.get('zipcode')}`
 	},
 	getPoleType() {
-		return this.get('pole_type')
+		return {
+			'CITY': 'City (Public)',
+			'UTILITY': 'Utility Company (Private)',
+		}[this.get('pole_type')]
 	},
 	getZone() {
 		return {
