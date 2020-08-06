@@ -57,18 +57,14 @@ class App extends FinderApp {
 	}
 	getUrl() {
 		const extent = this.view.calculateExtent(this.map.getSize())
-		console.warn(extent)
 		extent[0] = extent[0] - 500
 		extent[1] = extent[1] - 500
 		extent[2] = extent[2] + 500
 		extent[3] = extent[3] + 500
-		console.warn(extent)
 		const ext = polygonFromExtent(extent)
       .transform('EPSG:3857', 'EPSG:2263')
       .getExtent()
-			console.warn(ext)
 			const where = `x_coord > ${ext[0]} and x_coord < ${ext[2]} and y_coord > ${ext[1]} and y_coord < ${ext[3]}`
-		console.warn(where)
 		return `${poletop.POLE_DATA_URL}&$where=${encodeURIComponent(where)}`
 	}
   createSource() {
