@@ -60,7 +60,7 @@ const pole = {
 		return this.isInstalled() ? 'equipment_installed_yes' : 'equipment_installed_no'
 	},
 	html() {
-	return $('<div class="facility"></div>')
+	return $(`<div class="facility" data-fid="${this.getId()}"></div>`)
 			.addClass(this.cssClass())
 			.append(this.distanceHtml())
 			.append(this.nameHtml())

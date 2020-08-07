@@ -142,6 +142,19 @@ class App extends FinderApp {
 		}
 		super.resetList(event)
     this.popup.hide = hide
+	}
+  mobileDiaOpts() {
+    const location = this.location
+    const locationName = location.name
+    const feature = this.source.sort(location.coordinate)[0]
+    const options = {
+      buttonText: [
+        `<span class="msg-vw-list">View ${$('#tab-btn-1').text()} list</span>`,
+        '<span class="msg-vw-map">View the map</span>'
+			],
+			message: `<strong>${locationName}</strong>`
+    }
+    return options
   }
 }
 
