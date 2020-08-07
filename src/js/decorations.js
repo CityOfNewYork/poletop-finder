@@ -37,7 +37,7 @@ const communityBoard = {
 		return $(`<div class="name">${this.getCommunityBoardName()}</div>`)
 	},
 	zoomBtn() {
-		return $('<button class="btn rad-all">Show all poles</button>')
+		return $('<button class="btn rad-all">Zoom to Area</button>')
 			.data('feature', this)
 			.click($.proxy(this.app.showPoles, this.app))
 	},

@@ -44,7 +44,9 @@
 	margin: 0 3px -4px -20px;
 	background-color: rgba(51,153,204,.7);
 }
-
 .chc-chc.equipment_installed_yes_no label, .facility.equipment_installed_yes .name, .facility.equipment_installed_no .name {
 	padding-left: 18px;
+}
+.community-board .pop .content {
+	width: 290px;
 }

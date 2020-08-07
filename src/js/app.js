@@ -102,6 +102,7 @@ class App extends FinderApp {
 	}
 	cluster() {
 		if (this.view.getZoom() < poletop.CLUSTER_CUTOFF_ZOOM) {
+			$('body').addClass('community-board')
 			const prevSrc = this.source
 			this.layer.setSource(this.cdSrc)
 			this.source = this.cdSrc
@@ -113,6 +114,7 @@ class App extends FinderApp {
 			}
 			$('#tabs').addClass('no-flt')
 		} else {
+			$('body').removeClass('community-board')
 			const poleSrc = super.createSource({
 				facilityUrl: this.getUrl(),
 				decorations: [decorations.common, decorations.pole],
