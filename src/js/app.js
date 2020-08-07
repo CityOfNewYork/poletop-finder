@@ -57,7 +57,7 @@ class App extends FinderApp {
 		}
     this.view.animate({
       center: feature.getGeometry().getCoordinates(),
-      zoom: 14
+      zoom: $('body').hasClass('community-board') ? 14 : 17
     })
   }
 	showPoles(event) {
