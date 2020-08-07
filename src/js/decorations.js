@@ -115,9 +115,9 @@ const pole = {
 		ul.append(`<li><strong>Franchise Contract Zone: </strong>${this.getZone()}</li>`)
 		ul.append(`<li><strong>Reservation Date: </strong>${this.reservationDate()}</li>`)
 		if (this.isInstalled()) {
-			ul.append('<li><strong>Equipment is installed</strong></li>')
+			ul.append('<li><strong>Construction Status: </strong>Completed</li>')
 		} else {
-			ul.append('<li><strong>Equipment is not yet installed</strong></li>')
+			ul.append('<li><strong>Construction Status: </strong>Approved</li>')
 		}
 		if (advisories) {
 			ul.append($(`<li><strong>Additional Notes: </strong></li>`).append(this.getAdvisories()))

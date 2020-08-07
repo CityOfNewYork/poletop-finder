@@ -35,10 +35,10 @@ class App extends FinderApp {
 			geoclientUrl: poletop.GEOCLIENT_URL,
 			splashOptions: App.getSplashOptions(document.location.search),
 			filterChoiceOptions: [{
-				title: 'Equipment Installed',
+				title: 'Construction Status',
 				choices: [
-					{name: 'equipment_installed_yes_no', values: ['Y'], label: 'Equipment is installed', checked: true},
-					{name: 'equipment_installed_yes_no', values: ['N'], label: 'Equipment is not yet installed', checked: true}
+					{name: 'equipment_installed_yes_no', values: ['N'], label: 'Approved', checked: true},
+					{name: 'equipment_installed_yes_no', values: ['Y'], label: 'Completed', checked: true}
 				]
 			}]
 		})
