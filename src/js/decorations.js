@@ -84,7 +84,7 @@ const pole = {
 		return `Between ${this.get('cross_street_1')} and ${this.get('cross_street_2')}`
 	},
 	getCityStateZip() {
-		return `${this.get('borough')}, NY ${this.get('zipcode')}`
+		return `${this.getBoroName()}, NY ${this.get('zipcode')}`
 	},
 	getPoleType() {
 		return {
