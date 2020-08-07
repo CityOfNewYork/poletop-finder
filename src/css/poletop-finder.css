@@ -27,7 +27,7 @@
 .no-flt .btns h2:nth-of-type(3) {
 	display: none;
 }
-.chc-chc.equipment_installed_yes_no label[for=chc-chc-0]::before, .facility.equipment_installed_yes .name::before {
+.chc-chc.equipment_installed_yes_no label[for=chc-chc-1]::before, .facility.equipment_installed_yes .name::before {
 	background-image: url(../img/signal.svg);
 	background-repeat: no-repeat;
 	background-position: center;
