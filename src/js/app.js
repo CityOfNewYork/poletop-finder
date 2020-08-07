@@ -52,7 +52,10 @@ class App extends FinderApp {
     }
 		if (!feature.isCommunityBoard) {
 			this.map.once('moveend', () => {
+				const panIntoView = popup.panIntoView
+				popup.panIntoView = () => {}
 				popup.showFeature(feature)
+				popup.panIntoView = panIntoView
 			})
 		}
     this.view.animate({
