@@ -30,7 +30,7 @@ const style = (feature, resolution) => {
         color: '#fff',
       }),
       fill: new Fill({
-        color: 'rgba(51,153,204,.7)',
+        color: 'rgb(46,107,164,.7)'
       }),
     })
   })]
