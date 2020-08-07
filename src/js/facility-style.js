@@ -7,6 +7,9 @@ import Icon from 'ol/style/Icon'
 import poletop from './poletop'
 import nycOl from 'nyc-lib/nyc/ol'
 
+const IS_IE = window.navigator.userAgent.indexOf("MSIE ")
+const WIFI_ICON = IS_IE ? 'img/signal.png' :  'img/signal.svg'
+
 const getRadius = (resolution) => {
   let radius = 7
   const zoom = nycOl.TILE_GRID.getZForResolution(resolution)
@@ -55,7 +58,7 @@ const style = (feature, resolution) => {
   } else if (feature.isInstalled()) {
     style.push(new Style({
       image: new Icon({
-        src: 'img/signal.svg',
+        src: WIFI_ICON,
         imageSize: [512, 512],
         scale: radius * 1.5 / 512
       })
