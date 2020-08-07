@@ -41,8 +41,20 @@
 	margin: 0 3px -4px -20px;
 	background-color: rgba(46,107,164,.7);
 }
+.translated-rtl #filters label::before {
+	margin: 0px -6px -4px 2px;
+	float: initial;
+}
 .chc-chc.equipment_installed_yes_no label, .facility.equipment_installed_yes .name, .facility.equipment_installed_no .name {
 	padding-left: 18px;
+}
+.translated-rtl .chc-chc.equipment_installed_yes_no label::before,.translated-rtl .facility.equipment_installed_no .name::before,.translated-rtl .facility.equipment_installed_yes .name::before {
+	float: right;
+	margin: 0 3px -4px 0px;
+}
+.translated-rtl .pop>.content .name {
+	padding-right: unset;
+	padding-left: unset;
 }
 .community-board .pop .content {
 	width: 290px;
