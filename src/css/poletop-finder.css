@@ -17,9 +17,6 @@
 .facility ul li ul li {
 	font-size: 14px;
 }
-.fnd .splash .dia {
-	top: 20%;
-}
 .fnd .facility button.btn.map {
 	width: calc(100% - 3px);
 }
@@ -54,4 +51,26 @@
 .fnd .splash a.btn.rad-all.btn-yes {
 	width: 245px !important;
 	padding-left: 35px;
+}
+.tabs button.btn.active:focus, .tabs button.btn.active:focus * {
+	background-color: var(--focus-ring-color);
+	color: black;
+}
+
+.fnd .splash .dia {
+	top: 35px;
+	overflow: auto;
+}
+@media only screen and (max-width: 400px) {
+	.fnd .splash .dia {
+		width: calc(100% - 18px);
+		left: 0;
+	}
+}
+@media only screen and (max-height: 400px) {
+	.fnd .splash .dia {
+		width: calc(100% - 18px);
+		bottom: 0;
+		left: 0;
+	}
 }
