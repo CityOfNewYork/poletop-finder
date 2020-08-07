@@ -50,3 +50,8 @@
 .community-board .pop .content {
 	width: 290px;
 }
+/* fix in nyc-lib */
+.fnd .splash a.btn.rad-all.btn-yes {
+	width: 245px !important;
+	padding-left: 35px;
+}
