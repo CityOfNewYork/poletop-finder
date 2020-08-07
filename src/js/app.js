@@ -47,6 +47,9 @@ class App extends FinderApp {
 	}
 	zoomTo(feature) {
     const popup = this.popup
+    if ($('#tabs .btns h2:first-of-type').css('display') !== 'none') {
+      this.tabs.open('#map')
+    }
 		if (!feature.isCommunityBoard) {
 			this.map.once('moveend', () => {
 				popup.showFeature(feature)
