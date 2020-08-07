@@ -49,7 +49,7 @@ const style = (feature, resolution) => {
         color: '#fff',
       }),
       fill: new Fill({
-        color: 'rgb(46,107,164,.7)'
+        color: 'rgba(46,107,164,.7)'
       }),
     })
   })]

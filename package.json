@@ -1,6 +1,6 @@
 {
   "name": "poletop-finder",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "poletop-finder",
   "main": "index.js",
   "scripts": {

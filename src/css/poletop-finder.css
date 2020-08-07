@@ -1,5 +1,5 @@
 .fnd #banner {
-	background-image: url(../img/doitt-logo-solid.svg);
+	background-image: url(../img/doitt-logo-solid.png);
 	background-size: 197px;
 	background-position: -35px -55px;
 	padding-left: 125px;
@@ -28,7 +28,7 @@
 	display: none;
 }
 .chc-chc.equipment_installed_yes_no label[for=chc-chc-1]::before, .facility.equipment_installed_yes .name::before {
-	background-image: url(../img/signal.svg);
+	background-image: url(../img/signal.png);
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: 16px;
@@ -42,7 +42,7 @@
 	content: ' ';
 	border-radius: 50%;
 	margin: 0 3px -4px -20px;
-	background-color: rgb(46,107,164,.7);
+	background-color: rgba(46,107,164,.7);
 }
 .chc-chc.equipment_installed_yes_no label, .facility.equipment_installed_yes .name, .facility.equipment_installed_no .name {
 	padding-left: 18px;
