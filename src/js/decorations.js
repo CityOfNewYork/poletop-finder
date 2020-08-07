@@ -48,7 +48,7 @@ const communityBoard = {
 	},
 	getCount() {
     const cdNum = `${this.get('community_board')}`
-    return this.app.communityBoardCounts[cdNum]
+    return this.app.communityBoardCounts[cdNum] || 0
 	}
 }
 
