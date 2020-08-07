@@ -61,7 +61,7 @@ class App extends FinderApp {
     })
   }
 	showPoles(event) {
-		const feature = $(event.target).data('feature')
+		const feature = $(event.currentTarget).data('feature')
 		this.popup.hide()
 		this.zoomTo(feature)
 	}
