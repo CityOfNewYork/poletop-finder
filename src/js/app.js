@@ -99,6 +99,7 @@ class App extends FinderApp {
 					me.communityBoardCounts[row.community_board] = row.count
 				})
 				me.layer.changed()
+				me.resetList()
 			})
 		})
 		return me.cdSrc
