@@ -44,6 +44,21 @@ class App extends FinderApp {
 		})
 		this.layer.setZIndex(5000)
 		this.view.on('change', $.proxy(this.cluster, this))
+		this.resizeBanner()
+	}
+	resizeBanner() {
+		$('.fnd #banner>div').addClass('lg-view')
+		$('.fnd #banner>div').clone().appendTo('#banner').addClass('sm-view').removeClass('lg-view').html('Poletop Locations')
+		$(window).on('resize', () => {
+			if(parseInt($('.fnd #banner *').css('font-size')) < 16) {
+				$('.sm-view').css('display', 'block')
+				$('.lg-view').css('display', 'none')
+			}
+			else {
+				$('.sm-view').css('display', 'none')
+				$('.lg-view').css('display', 'block')
+			}
+		}).resize()
 	}
 	zoomTo(feature) {
     const popup = this.popup
