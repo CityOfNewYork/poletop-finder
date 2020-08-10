@@ -29,7 +29,7 @@ class App extends FinderApp {
 	 */
 	constructor() {
 		super({
-			title: '4G Poletop Installation Locations',
+			title: 'Mobile Telecommunications Poletop Infrastructure Locations',
 			facilityStyle,
 			facilityTabTitle: 'Locations',
 			geoclientUrl: poletop.GEOCLIENT_URL,

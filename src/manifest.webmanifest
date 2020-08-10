@@ -1,6 +1,6 @@
 {  
-  "short_name": "4G Poletop Installation Locations",  
-  "name": "4G Poletop Installation Locations",  
+  "short_name": "Mobile Telecommunications Poletop Infrastructure Locations",  
+  "name": "Mobile Telecommunications Poletop Infrastructure Locations",  
   "description": "This map includes locations of street light poles, traffic light poles, and utility poles that are approved for installation of mobile telecommunications equipment by companies authorized by the New York City Department of Information Technology and Telecommunications (DoITT). Today, these poletop locations are used to provide 4G across NYC and in the future may include additional pole-mounted equipment to support 5G.",  
   "start_url": "index.html",  
   "icons": [  
