@@ -45,8 +45,14 @@
 	margin: 0px -6px -4px 2px;
 	float: initial;
 }
-.chc-chc.equipment_installed_yes_no label, .facility.equipment_installed_yes .name, .facility.equipment_installed_no .name {
+.facility.equipment_installed_yes .name, .facility.equipment_installed_no .name {
 	padding-left: 18px;
+}
+.chc-chc.equipment_installed_yes_no label {
+	padding-left: 21px;
+}
+.translated-rtl .chc-chc.equipment_installed_yes_no label {
+	padding-right: 7px;
 }
 .translated-rtl .chc-chc.equipment_installed_yes_no label::before,.translated-rtl .facility.equipment_installed_no .name::before,.translated-rtl .facility.equipment_installed_yes .name::before {
 	float: right;
