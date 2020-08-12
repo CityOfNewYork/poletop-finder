@@ -96,26 +96,13 @@
 	}
 }
 /* responsive banner */
-@media only screen and (max-width: 855px) {
+@media only screen and (max-width: 1020px) {
 	.fnd #banner>div {
 		line-height: 1;
 		margin: 5px 34px 3px 5px;
 	}
 	.fnd #banner, .fnd #banner * {
-		font-size: calc(2vw + 0.5vh);
-	}
-}
-@media only screen and (max-width: 1020px) {
-	html[lang="fr"] .fnd #banner, html[lang="fr"] .fnd #banner *,
-	html[lang="es"] .fnd #banner, html[lang="es"] .fnd #banner *,
-	html[lang="ru"] .fnd #banner, html[lang="ru"] .fnd #banner * {
-		font-size: calc(1.8vw + 0.5vh);
-	}
-}
-@media only screen and (max-width: 375px) {
-	.fnd #banner>div {
-		line-height: 1;
-		margin: 0px 34px 3px 5px;
+		font-size: 2vw;
 	}
 }
 .sm-view, .sm-view * {
@@ -128,8 +115,4 @@
 }
 html[lang="ur"] .fnd #banner>div {
     margin-right: 34px;
-    overflow: hidden;
-    max-height: 35px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
 }

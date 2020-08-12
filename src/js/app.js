@@ -47,12 +47,25 @@ class App extends FinderApp {
 		this.resizeBanner()
 	}
 	resizeBanner() {
-		$('.fnd #banner>div').addClass('lg-view')
-		$('.fnd #banner>div').clone().appendTo('#banner').addClass('sm-view').removeClass('lg-view').html('Poletop Locations')
+		$('.fnd #banner>div').addClass('lg-view').html('<span>Mobile Telecommunications Poletop Infrastructure Locations</span>')
+		$('.fnd #banner>div').clone().appendTo('#banner').addClass('sm-view').removeClass('lg-view').html('<span>Poletop Locations</span>')
 		$(window).on('resize', () => {
+			if ($('.fnd .lg-view *').height() >= 30 || parseInt($('.fnd #banner>div').css('font-size')) > 20) {
+				$('.fnd #banner>div').css('margin-top', '0px')
+			}
+			else 
+				$('.fnd #banner>div').css('margin-top', '5px')
 			if(parseInt($('.fnd #banner *').css('font-size')) < 16) {
 				$('.sm-view').css('display', 'block')
 				$('.lg-view').css('display', 'none')
+				//if title is on one line, set margin-top to  5px (height == 18)
+				if ($('.fnd .sm-view').width() > $('.fnd .sm-view *').width() && $('.fnd .sm-view *').height() == 18) {
+					$('.fnd #banner>div').css('margin-top', '5px')
+				}
+				//if title is on two lines, set margin-top to  0px (height >= 34)
+				else if ($('.fnd .sm-view').width() <= $('.fnd .sm-view *').width() || $('.fnd .sm-view *').height() >= 34) {
+					$('.fnd #banner>div').css('margin-top', '0px')
+				}
 			}
 			else {
 				$('.sm-view').css('display', 'none')
