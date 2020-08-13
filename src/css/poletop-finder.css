@@ -81,6 +81,7 @@
 .fnd .splash .dia {
 	top: 35px;
 	overflow: auto;
+	border: 1px solid #fff;
 }
 @media only screen and (max-width: 400px) {
 	.fnd .splash .dia {
