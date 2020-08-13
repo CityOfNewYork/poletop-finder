@@ -120,3 +120,6 @@ html[lang="ur"] .fnd #banner>div {
 .chc-chc input {
 	-webkit-appearance: none;
 }
+.lst-it:nth-child(even) .dtl .clps .content {
+	background-color: #fff;
+}
