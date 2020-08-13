@@ -83,6 +83,21 @@
 	overflow: auto;
 	border: 1px solid #fff;
 }
+.sm-view, .sm-view * {
+	font-size: 16px !important;
+}
+.fnd #banner>div {
+    margin-right: 34px;
+	overflow: hidden;
+	height: 31px;
+}
+html[lang="ur"] .fnd #banner>div {
+    margin-right: 34px;
+}
+
+.chc-chc input {
+	-webkit-appearance: none;
+}
 @media only screen and (max-width: 400px) {
 	.fnd .splash .dia {
 		width: calc(100% - 18px);
@@ -105,22 +120,4 @@
 	.fnd #banner, .fnd #banner * {
 		font-size: 2vw;
 	}
-}
-.sm-view, .sm-view * {
-	font-size: 16px !important;
-}
-.fnd #banner>div {
-    margin-right: 34px;
-	overflow: hidden;
-	height: 31px;
-}
-html[lang="ur"] .fnd #banner>div {
-    margin-right: 34px;
-}
-
-.chc-chc input {
-	-webkit-appearance: none;
-}
-.lst-it:nth-child(even) .dtl .clps .content {
-	background-color: #fff;
 }
