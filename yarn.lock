@@ -5348,9 +5348,9 @@ is-redirect@^1.0.0:
   integrity sha1-HQPd7VO9jbDzDCbk+V02/HyH3CQ=
 
 is-regex@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/is-regex/-/is-regex-1.1.0.tgz#ece38e389e490df0dc21caea2bd596f987f767ff"
-  integrity sha512-iI97M8KTWID2la5uYXlkbSDQIg4F6o1sYboZKKTDpnDQMLtUL86zxhgDet3Q2SriaYsyGqZ6Mn2SjbRKeLHdqw==
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/is-regex/-/is-regex-1.1.1.tgz#c6f98aacc546f6cec5468a07b7b153ab564a57b9"
+  integrity sha512-1+QkEcxiLlB7VEyFtyBg94e08OAsvq7FUBgApTq/w2ymCLyKJgDPsybBENVtA7XCQEgEXxKPonG+mvYRxh/LIg==
   dependencies:
     has-symbols "^1.0.1"
 
@@ -6965,10 +6965,10 @@ nyc-build-helper@^0.0.35:
     webpack "4.19.1"
     zip-dir "^1.0.2"
 
-nyc-lib@^1.4.15:
-  version "1.4.15"
-  resolved "https://registry.yarnpkg.com/nyc-lib/-/nyc-lib-1.4.15.tgz#aacc15f0ed5fabae1a518f29a6911dea87b17ba0"
-  integrity sha512-yIg+C2tzBXHqof4u5de8ja5P4+Ifik2UUI2J2I6+2ampsIJ9imuCppBLJ27VKI2VJ1zTP54to9O28eYg6/vhfw==
+nyc-lib@^1.4.16:
+  version "1.4.16"
+  resolved "https://registry.yarnpkg.com/nyc-lib/-/nyc-lib-1.4.16.tgz#b448459ad75ff5cf094aab82719c1fd9e75c0ae3"
+  integrity sha512-GCCoXOBxP33GgiqCeNtK9h8hZqFwteLYxwoU3R34NeTiyW1m0/E+XHO0OLj1MFUVlivCz5wRXjfJoz6S0csGnw==
   dependencies:
     eslint-config-openlayers "^11.0.0"
     eslint-import-resolver-alias "^1.1.2"

@@ -23,7 +23,7 @@
   "homepage": "https://github.com/CityOfNewYork/poletop-finder#readme",
   "dependencies": {
     "jquery": "^3.3.1",
-    "nyc-lib": "^1.4.15",
+    "nyc-lib": "^1.4.16",
     "ol": "6.1.0",
     "papaparse": "^4.5.1",
     "proj4": "^2.4.4"
