@@ -32,6 +32,9 @@ const communityBoard = {
 		return $('<div class="facility"></div>')
 			.append(this.getTip())
 			.append(this.zoomBtn())
+      .data('feature', this)
+      .mouseover($.proxy(this.handleOver, this))
+      .mouseout($.proxy(this.handleOut, this))
 	},
 	getName() {
 		return $(`<div class="name">${this.getCommunityBoardName()}</div>`)
@@ -70,6 +73,9 @@ const pole = {
 			.append(`<div><strong>Council District: </strong>${this.getCouncilDistrict()}</div>`)
 			.append(this.mapButton())
 			.append(this.detailsCollapsible())
+      .data('feature', this)
+      .mouseover($.proxy(this.handleOver, this))
+      .mouseout($.proxy(this.handleOut, this))
 	},
 	getFranchisee() {
 		return this.get('franchisee')

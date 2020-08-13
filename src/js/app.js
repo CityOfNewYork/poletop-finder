@@ -8,18 +8,9 @@ import CsvPoint from 'nyc-lib/nyc/ol/format/CsvPoint'
 import decorations from './decorations'
 import facilityStyle from './facility-style'
 import poletop from './poletop'
-import GeoJSON from 'ol/format/GeoJSON'
-import {getCenter} from 'ol/extent'
 import fetchTimeout from 'nyc-lib/nyc/fetchTimeout'
-import SocrataJson from 'nyc-lib/nyc/ol/source/SocrataJson'
-import SocrataFormat from 'nyc-lib/nyc/ol/format/SocrataJson'
-import Decorate from 'nyc-lib/nyc/ol/format/Decorate'
-import {bbox} from 'ol/loadingstrategy'
 import {fromExtent as polygonFromExtent} from 'ol/geom/Polygon'
-import Vector from 'ol/source/Vector'
-import MapLocator from 'nyc-lib/nyc/ol/MapLocator'
-
-MapLocator.ZOOM_LEVEL = 14
+import MapMgr from 'nyc-lib/nyc/ol/MapMgr'
 
 class App extends FinderApp {
 	/**
@@ -30,7 +21,8 @@ class App extends FinderApp {
 	constructor() {
 		super({
 			title: 'Mobile Telecommunications Poletop Infrastructure Locations',
-			facilityStyle,
+			facilityStyle: facilityStyle.style,
+			highlightStyle: facilityStyle.highLightStyle,
 			facilityTabTitle: 'Locations',
 			geoclientUrl: poletop.GEOCLIENT_URL,
 			splashOptions: App.getSplashOptions(document.location.search),
@@ -43,6 +35,7 @@ class App extends FinderApp {
 			}]
 		})
 		this.layer.setZIndex(5000)
+		this.highlightLayer.setZIndex(5001)
 		this.view.on('change', $.proxy(this.cluster, this))
 		this.resizeBanner()
 	}
@@ -113,7 +106,7 @@ class App extends FinderApp {
 		me.communityBoardCounts = {}
 		me.cdSrc = super.createSource({
 			facilityUrl: poletop.COMMUNITY_BOARD_URL,
-			decorations: [decorations.common, decorations.communityBoard],
+			decorations: [MapMgr.FEATURE_DECORATIONS, decorations.common, decorations.communityBoard],
 			facilityFormat: new CsvPoint({
 				x: 'x',
 				y: 'y',
@@ -149,7 +142,7 @@ class App extends FinderApp {
 			$('body').removeClass('community-board')
 			const poleSrc = super.createSource({
 				facilityUrl: this.getUrl(),
-				decorations: [decorations.common, decorations.pole],
+				decorations: [MapMgr.FEATURE_DECORATIONS, decorations.common, decorations.pole],
 				facilityFormat: new CsvPoint({
 					id: 'id',
 					x: 'x_coord',
