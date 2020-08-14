@@ -11,6 +11,8 @@ import poletop from './poletop'
 import fetchTimeout from 'nyc-lib/nyc/fetchTimeout'
 import {fromExtent as polygonFromExtent} from 'ol/geom/Polygon'
 import MapMgr from 'nyc-lib/nyc/ol/MapMgr'
+import FilterAndSort from 'nyc-lib/nyc/ol/source/FilterAndSort'
+import {containsExtent} from 'ol/extent'
 
 class App extends FinderApp {
 	/**
@@ -37,6 +39,7 @@ class App extends FinderApp {
 		this.layer.setZIndex(5000)
 		this.highlightLayer.setZIndex(5001)
 		this.view.on('change', $.proxy(this.cluster, this))
+		this.extents = []
 		this.resizeBanner()
 	}
 	resizeBanner() {
@@ -91,6 +94,19 @@ class App extends FinderApp {
 	}
 	getUrl() {
 		const extent = this.view.calculateExtent(this.map.getSize())
+		let alreadyGotOne = false
+		this.extents.forEach(old => {
+			if (containsExtent(old, extent)) {
+				alreadyGotOne = true
+			}
+		})
+		
+		if (alreadyGotOne) {
+			return
+		}
+
+		this.extents.push(extent)
+
 		extent[0] = extent[0] - 500
 		extent[1] = extent[1] - 500
 		extent[2] = extent[2] + 500
@@ -102,47 +118,51 @@ class App extends FinderApp {
 		return `${poletop.POLE_DATA_URL}&$where=${encodeURIComponent(where)}`
 	}
   createSource() {
-		const me = this
-		me.communityBoardCounts = {}
-		me.cdSrc = super.createSource({
+		this.communityBoardCounts = {}
+		this.poleSrc = new FilterAndSort({})
+		this.poleSrc._name = 'pole'
+		this.cdSrc = super.createSource({
 			facilityUrl: poletop.COMMUNITY_BOARD_URL,
-			decorations: [MapMgr.FEATURE_DECORATIONS, decorations.common, decorations.communityBoard],
+			decorations: [decorations.common, decorations.communityBoard],
 			facilityFormat: new CsvPoint({
 				x: 'x',
 				y: 'y',
 				dataProjection: 'EPSG:2263'
 			})
 		})
+		this.cdSrc._name = 'cd'
 		fetchTimeout(poletop.GROUPED_DATA_URL).then(response => {
 			response.text().then(csv => {
 				const rows = Papa.parse(csv, {header: true}).data
 				rows.forEach(row => {
-					me.communityBoardCounts[row.community_board] = row.count
+					this.communityBoardCounts[row.community_board] = row.count
 				})
-				me.layer.changed()
-				me.resetList()
+				this.layer.changed()
+				this.resetList()
 			})
 		})
-		return me.cdSrc
+		return this.cdSrc
 	}
 	cluster() {
+		const prevSrc = this.source
 		if (this.view.getZoom() < poletop.CLUSTER_CUTOFF_ZOOM) {
 			$('body').addClass('community-board')
-			const prevSrc = this.source
 			this.layer.setSource(this.cdSrc)
 			this.source = this.cdSrc
-			if (this.source !== prevSrc) {
-				this.resetList()
-			}
 			if (this.tabs.active.attr('id') === 'filters') {
 				this.tabs.open('#facilities')
 			}
 			$('#tabs').addClass('no-flt')
+			this.srcChange(prevSrc)
 		} else {
+			const url = this.getUrl()
+			if (!url) {
+				return
+			}
 			$('body').removeClass('community-board')
 			const poleSrc = super.createSource({
-				facilityUrl: this.getUrl(),
-				decorations: [MapMgr.FEATURE_DECORATIONS, decorations.common, decorations.pole],
+				facilityUrl: url,
+				decorations: [decorations.common, decorations.pole],
 				facilityFormat: new CsvPoint({
 					id: 'id',
 					x: 'x_coord',
@@ -150,14 +170,29 @@ class App extends FinderApp {
 					dataProjection: 'EPSG:2263'
 				})
 			})
-			poleSrc.autoLoad().then(() => {
-				this.source = poleSrc
+			poleSrc.autoLoad().then(features => {
+				features.forEach(feature => {
+					if (!this.poleSrc.getFeatureById(feature.getId())) {
+						this.poleSrc.allFeatures.push(feature)
+					}
+				})
+				this.source = this.poleSrc
 				$('#tabs').removeClass('no-flt')
-				this.filters.source = poleSrc
-				this.filters.filter()
-				this.layer.setSource(poleSrc)
-				this.resetList()
+				this.poleSrc.filter(this.filters.getFilters())
+				if (this.location.coordinate) {
+					this.poleSrc.sort(this.location.coordinate)
+					this.resetList()
+				}
+				this.filters.source = this.poleSrc
+				this.layer.setSource(this.poleSrc)
+				this.srcChange(prevSrc)
 			})
+		}
+	}
+	srcChange(prevSrc) {
+		if (this.source._name !== prevSrc._name) {
+			this.resetList()
+			this.highlightSource.clear()
 		}
 	}
 	resetList(event) {
