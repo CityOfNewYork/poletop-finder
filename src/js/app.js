@@ -86,7 +86,7 @@ class App extends FinderApp {
       zoom: $('body').hasClass('community-board') ? 14 : 17
     })
   }
-	showPoles(event) {
+	zoomToArea(event) {
 		const feature = $(event.currentTarget).data('feature')
 		this.popup.hide()
 		this.zoomTo(feature)
@@ -146,42 +146,46 @@ class App extends FinderApp {
 			this.srcChange(prevSrc)
 		} else {
 			const url = this.getUrl()
-			if (!url) {
-				return
-			}
 			$('body').removeClass('community-board')
-			const poleSrc = super.createSource({
-				facilityUrl: url,
-				decorations: [decorations.common, decorations.pole],
-				facilityFormat: new CsvPoint({
-					id: 'id',
-					x: 'x_coord',
-					y: 'y_coord',
-					dataProjection: 'EPSG:2263'
-				})
-			})
-			poleSrc.autoLoad().then(features => {
-				if (this.poleSrc.allFeatures.length > 0) {
-					features.forEach(feature => {
-						if (!this.poleSrc.getFeatureById(feature.getId())) {
-							this.poleSrc.allFeatures.push(feature)
-						}
+			if (url) {
+				const poleSrc = super.createSource({
+					facilityUrl: url,
+					decorations: [decorations.common, decorations.pole],
+					facilityFormat: new CsvPoint({
+						id: 'id',
+						x: 'x_coord',
+						y: 'y_coord',
+						dataProjection: 'EPSG:2263'
 					})
-				} else {
-					this.poleSrc.allFeatures = features
-				}
-				this.source = this.poleSrc
-				$('#tabs').removeClass('no-flt')
-				this.poleSrc.filter(this.filters.getFilters())
-				if (this.location.coordinate) {
-					this.poleSrc.sort(this.location.coordinate)
-					this.resetList()
-				}
-				this.filters.source = this.poleSrc
-				this.layer.setSource(this.poleSrc)
-				this.srcChange(prevSrc)
-			})
+				})
+				poleSrc.autoLoad().then(features => {
+					if (this.poleSrc.allFeatures.length > 0) {
+						features.forEach(feature => {
+							if (!this.poleSrc.getFeatureById(feature.getId())) {
+								this.poleSrc.allFeatures.push(feature)
+							}
+						})
+					} else {
+						this.poleSrc.allFeatures = features
+					}
+					this.showPoles(prevSrc)
+				})				
+			} else {
+				this.showPoles(prevSrc)
+			}
 		}
+	}
+	showPoles(prevSrc) {
+		this.source = this.poleSrc
+		$('#tabs').removeClass('no-flt')
+		this.poleSrc.filter(this.filters.getFilters())
+		if (this.location.coordinate) {
+			this.poleSrc.sort(this.location.coordinate)
+			this.resetList()
+		}
+		this.filters.source = this.poleSrc
+		this.layer.setSource(this.poleSrc)
+		this.srcChange(prevSrc)
 	}
 	srcChange(prevSrc) {
 		if (this.source._name !== prevSrc._name) {

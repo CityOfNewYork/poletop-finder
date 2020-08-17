@@ -42,7 +42,7 @@ const communityBoard = {
 	zoomBtn() {
 		return $('<button class="btn rad-all">Zoom to Area</button>')
 			.data('feature', this)
-			.click($.proxy(this.app.showPoles, this.app))
+			.click($.proxy(this.app.zoomToArea, this.app))
 	},
 	getTip() {
 		return $('<div></div>')
