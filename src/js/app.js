@@ -10,7 +10,6 @@ import facilityStyle from './facility-style'
 import poletop from './poletop'
 import fetchTimeout from 'nyc-lib/nyc/fetchTimeout'
 import {fromExtent as polygonFromExtent} from 'ol/geom/Polygon'
-import MapMgr from 'nyc-lib/nyc/ol/MapMgr'
 import FilterAndSort from 'nyc-lib/nyc/ol/source/FilterAndSort'
 import {containsExtent} from 'ol/extent'
 
@@ -94,27 +93,18 @@ class App extends FinderApp {
 	}
 	getUrl() {
 		const extent = this.view.calculateExtent(this.map.getSize())
-		let alreadyGotOne = false
-		this.extents.forEach(old => {
-			if (containsExtent(old, extent)) {
-				alreadyGotOne = true
-			}
-		})
-		
-		if (alreadyGotOne) {
+		if (this.extents.some(old => {return containsExtent(old, extent)})) {
 			return
 		}
-
 		this.extents.push(extent)
-
-		extent[0] = extent[0] - 500
+	extent[0] = extent[0] - 500
 		extent[1] = extent[1] - 500
 		extent[2] = extent[2] + 500
 		extent[3] = extent[3] + 500
 		const ext = polygonFromExtent(extent)
       .transform('EPSG:3857', 'EPSG:2263')
       .getExtent()
-			const where = `x_coord > ${ext[0]} and x_coord < ${ext[2]} and y_coord > ${ext[1]} and y_coord < ${ext[3]}`
+		const where = `x_coord > ${ext[0]} and x_coord < ${ext[2]} and y_coord > ${ext[1]} and y_coord < ${ext[3]}`
 		return `${poletop.POLE_DATA_URL}&$where=${encodeURIComponent(where)}`
 	}
   createSource() {
@@ -171,11 +161,15 @@ class App extends FinderApp {
 				})
 			})
 			poleSrc.autoLoad().then(features => {
-				features.forEach(feature => {
-					if (!this.poleSrc.getFeatureById(feature.getId())) {
-						this.poleSrc.allFeatures.push(feature)
-					}
-				})
+				if (this.poleSrc.allFeatures.length > 0) {
+					features.forEach(feature => {
+						if (!this.poleSrc.getFeatureById(feature.getId())) {
+							this.poleSrc.allFeatures.push(feature)
+						}
+					})
+				} else {
+					this.poleSrc.allFeatures = features
+				}
 				this.source = this.poleSrc
 				$('#tabs').removeClass('no-flt')
 				this.poleSrc.filter(this.filters.getFilters())
