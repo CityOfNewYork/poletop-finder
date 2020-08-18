@@ -8,7 +8,7 @@ import poletop from './poletop'
 import nycOl from 'nyc-lib/nyc/ol'
 
 const IS_IE = window.navigator.userAgent.indexOf("MSIE ")
-const WIFI_ICON = IS_IE ? 'img/signal.png' :  'img/signal.svg'
+const WIFI_ICON = IS_IE != -1 ? 'img/signal.png' :  'img/signal.svg'
 
 const getRadius = (feature, resolution) => {
   let radius = 7
@@ -59,7 +59,7 @@ const style = (feature, resolution) => {
     style.push(new Style({
       image: new Icon({
         src: WIFI_ICON,
-        imageSize: [512, 512],
+        imgSize: [512, 512],
         scale: radius * 1.5 / 512
       })
     }))
@@ -79,4 +79,4 @@ const highLightStyle = (feature, resolution) => {
   })
 }
 
-export default {style, highLightStyle}
+export default {style, highLightStyle, getRadius}
