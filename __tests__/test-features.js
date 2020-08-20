@@ -7,7 +7,7 @@ let poleFeature, cbFeature
 
 poleFeature = new Feature({
   id: 1,
-  reservation_date: 'reservation_date',
+  reservation_date: '12/29/2017',
   franchisee: 'franchisee',
   pole_type: 'CITY',
   borough: 'Brooklyn',
@@ -20,8 +20,8 @@ poleFeature = new Feature({
   scenic_landmark_advisory: 'scenic_landmark_advisory',
   bid_advisory: 'bid_advisory',
   school_advisory: 'school_advisory',
-  community_board: 'community_board',
-  council_district: 'council_district',
+  community_board: '305',
+  council_district: '100',
   equipment_installed_yes_no: 'Y',
   zone: 'B',
   longitude: 73.9826700,
@@ -29,14 +29,18 @@ poleFeature = new Feature({
   x_coord: 989062,
   y_coord: 160733
 })
-Object.assign(poleFeature, decorations.common, decorations.pole, {app: mockApp})
 
+Object.assign(poleFeature, decorations.common, decorations.pole, {app: mockApp})
+poleFeature.extendFeature()
+poleFeature.setId(poleFeature.get('id'))
 
 cbFeature = new Feature({
   community_board: '205',
   count: 100
 })
+
 Object.assign(cbFeature, decorations.common, decorations.communityBoard, {app: mockApp})
 cbFeature.extendFeature()
+cbFeature.setId(cbFeature.get('id'))
 
 module.exports = {poleFeature,cbFeature}

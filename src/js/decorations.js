@@ -1,5 +1,4 @@
 import ReplaceTokens from 'nyc-lib/nyc/ReplaceTokens'
-import { wrapX } from 'ol/extent'
 
 const common = {
 	getCommunityBoardNum() {
@@ -57,7 +56,7 @@ const communityBoard = {
 
 const pole = {
 	extendFeature() {
-		this.replace = new ReplaceTokens().replace
+    this.replace = new ReplaceTokens().replace
 	},
 	cssClass() {
 		return this.isInstalled() ? 'equipment_installed_yes' : 'equipment_installed_no'
@@ -81,7 +80,7 @@ const pole = {
 		return this.get('franchisee')
 	},
 	getName() {
-		return `Poletop Reservation ID ${this.getId()}`
+    return `Poletop Reservation ID ${this.getId()}`
 	},
 	getAddress1() {
 		return `${this.get('on_street')}`
