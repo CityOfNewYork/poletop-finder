@@ -12,6 +12,7 @@ import fetchTimeout from 'nyc-lib/nyc/fetchTimeout'
 import {fromExtent as polygonFromExtent} from 'ol/geom/Polygon'
 import FilterAndSort from 'nyc-lib/nyc/ol/source/FilterAndSort'
 import {containsExtent} from 'ol/extent'
+import Papa from 'papaparse'
 
 class App extends FinderApp {
 	/**
