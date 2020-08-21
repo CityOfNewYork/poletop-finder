@@ -34,13 +34,16 @@ class App extends FinderApp {
 					{name: 'equipment_installed_yes_no', values: ['Y'], label: 'Completed', checked: true}
 				]
 			}]
-		})
-		this.layer.setZIndex(5000)
-		this.highlightLayer.setZIndex(5001)
+    })
+    this.rearrangeLayers()
 		this.view.on('change', $.proxy(this.cluster, this))
 		this.extents = []
 		this.resizeBanner()
-	}
+  }
+  rearrangeLayers() {
+		this.layer.setZIndex(5000)
+		this.highlightLayer.setZIndex(5001)
+  }
 	resizeBanner() {
 		$('.fnd #banner>div').addClass('lg-view').html('<span>Mobile Telecommunications Poletop Infrastructure Locations</span>')
 		$('.fnd #banner>div').clone().appendTo('#banner').addClass('sm-view').removeClass('lg-view').html('<span>Poletop Locations</span>')
