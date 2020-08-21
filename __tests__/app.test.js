@@ -4,6 +4,7 @@ import poletop from '../src/js/poletop'
 import decorations from '../src/js/decorations'
 import facilityStyle from '../src/js/facility-style'
 import Layer from 'ol/layer/Vector'
+import {poleFeature, cbFeature} from './test-features'
 
 jest.mock('nyc-lib/nyc/ol/FinderApp')
 jest.mock('ol/layer/Vector')
@@ -17,7 +18,7 @@ beforeEach(() => {
   Layer.mockClear()
   App.prototype.rearrangeLayers = jest.fn()
   App.prototype.resizeBanner = jest.fn()
-  FinderApp.prototype.view = {on: jest.fn()}
+  FinderApp.prototype.view = {on: jest.fn(), animate: jest.fn()}
 })
 afterEach(() => {
   App.prototype.rearrangeLayers = rearrangeLayers
@@ -88,9 +89,156 @@ test('resizeBanner', () => {
     
 })
 
-test('zoomTo', () => {
-    
+describe('zoomTo', () => {
+  
+  const mockPopup = {
+    hide: jest.fn(),
+    panIntoView: jest.fn(),
+    showFeature: jest.fn().mockImplementation(() => {
+      mockPopup.panIntoView() //standard behavior of showFeatures
+    })
+  }
+  const mockTabs = {
+    open: jest.fn()
+  }
+  const mockMap = {
+    handlers: {},
+    once: (event, handler) => {
+      mockMap.handlers[event] = handler
+    },
+    trigger: (event) => {
+      if (mockMap.handlers[event]) {
+        mockMap.handlers[event]({pixel: 'mock-pixel'})
+        delete mockMap.handlers[event]
+      }
+    }
+  }
+  const noPanIntoView = App.noPanIntoView
+  const css = $('body').attr('class')
+  let tabs
+  beforeEach(() => {
+    App.noPanIntoView = jest.fn()
+    mockTabs.open.mockClear()
+    mockPopup.hide.mockClear()
+    mockPopup.panIntoView.mockClear()
+    mockPopup.showFeature.mockClear()
+    tabs = $('<div id="tabs"><div class="btns"><h2></h2><h2></h2></div></div>')
+    $('body').append(tabs)
+  })
+  afterEach(() => {
+    App.noPanIntoView = noPanIntoView
+    $('body').attr('class', css)
+    tabs.remove()
+  })
+  test('zoomTo - pole', () => {
+    expect.assertions(9)
+
+    const app = new App()
+    app.popup = mockPopup
+    app.tabs = mockTabs
+    app.map = mockMap
+
+    $('body').addClass('community-board')
+    $('#tabs .btns h2:first-of-type').css('display', 'block')
+
+    app.zoomTo(poleFeature)
+
+    expect(app.tabs.open).toHaveBeenCalledTimes(1)
+    expect(app.tabs.open.mock.calls[0][0]).toBe('#map')
+
+    mockMap.trigger('moveend')
+
+    expect(App.noPanIntoView).toHaveBeenCalledTimes(1)
+    expect(mockPopup.panIntoView).toHaveBeenCalledTimes(0)
+    expect(app.popup.showFeature).toHaveBeenCalledTimes(1)
+    expect(app.popup.showFeature.mock.calls[0][0]).toBe(poleFeature)
+
+    expect(FinderApp.prototype.view.animate).toHaveBeenCalledTimes(1)
+    expect(FinderApp.prototype.view.animate.mock.calls[0][0].center).toEqual(poleFeature.getGeometry().getCoordinates())
+    expect(FinderApp.prototype.view.animate.mock.calls[0][0].zoom).toBe(14)
+  })
+  test('zoomTo - community board', () => {
+    expect.assertions(8)
+
+    const app = new App()
+    app.popup = mockPopup
+    app.tabs = mockTabs
+    app.map = mockMap
+
+    $('body').addClass('community-board')
+    $('#tabs .btns h2:first-of-type').css('display', 'block')
+
+    app.zoomTo(cbFeature)
+
+    expect(app.tabs.open).toHaveBeenCalledTimes(1)
+    expect(app.tabs.open.mock.calls[0][0]).toBe('#map')
+
+    mockMap.trigger('moveend')
+
+    expect(App.noPanIntoView).toHaveBeenCalledTimes(0)
+    expect(mockPopup.panIntoView).toHaveBeenCalledTimes(0)
+    expect(app.popup.showFeature).toHaveBeenCalledTimes(0)
+
+    expect(FinderApp.prototype.view.animate).toHaveBeenCalledTimes(1)
+    expect(FinderApp.prototype.view.animate.mock.calls[0][0].center).toEqual(poleFeature.getGeometry().getCoordinates())
+    expect(FinderApp.prototype.view.animate.mock.calls[0][0].zoom).toBe(14)
+  })
+  test('zoomTo - tab button not visible ', () => {
+    expect.assertions(8)
+
+    const app = new App()
+    app.popup = mockPopup
+    app.tabs = mockTabs
+    app.map = mockMap
+
+    $('body').addClass('community-board')
+    $('#tabs .btns h2:first-of-type').css('display', 'none')
+
+    app.zoomTo(poleFeature)
+
+    expect(app.tabs.open).toHaveBeenCalledTimes(0)
+
+    mockMap.trigger('moveend')
+
+    expect(App.noPanIntoView).toHaveBeenCalledTimes(1)
+    expect(mockPopup.panIntoView).toHaveBeenCalledTimes(0)
+    expect(app.popup.showFeature).toHaveBeenCalledTimes(1)
+    expect(app.popup.showFeature.mock.calls[0][0]).toBe(poleFeature)
+
+    expect(FinderApp.prototype.view.animate).toHaveBeenCalledTimes(1)
+    expect(FinderApp.prototype.view.animate.mock.calls[0][0].center).toEqual(poleFeature.getGeometry().getCoordinates())
+    expect(FinderApp.prototype.view.animate.mock.calls[0][0].zoom).toBe(14)
+  })
+  test('zoomTo - no community board class', () => {
+    expect.assertions(9)
+
+    const app = new App()
+    app.popup = mockPopup
+    app.tabs = mockTabs
+    app.map = mockMap
+
+    $('body').removeClass('community-board')
+    $('#tabs .btns h2:first-of-type').css('display', 'block')
+
+    app.zoomTo(poleFeature)
+
+    expect(app.tabs.open).toHaveBeenCalledTimes(1)
+    expect(app.tabs.open.mock.calls[0][0]).toBe('#map')
+
+    mockMap.trigger('moveend')
+
+    expect(App.noPanIntoView).toHaveBeenCalledTimes(1)
+    expect(mockPopup.panIntoView).toHaveBeenCalledTimes(0)
+    expect(app.popup.showFeature).toHaveBeenCalledTimes(1)
+    expect(app.popup.showFeature.mock.calls[0][0]).toBe(poleFeature)
+
+    expect(FinderApp.prototype.view.animate).toHaveBeenCalledTimes(1)
+    expect(FinderApp.prototype.view.animate.mock.calls[0][0].center).toEqual(poleFeature.getGeometry().getCoordinates())
+    expect(FinderApp.prototype.view.animate.mock.calls[0][0].zoom).toBe(17)
+  })
+
 })
+
 
 test('zoomToArea', () => {
     

@@ -70,7 +70,7 @@ class App extends FinderApp {
 				$('.lg-view').css('display', 'block')
 			}
 		}).resize()
-	}
+  }
 	zoomTo(feature) {
     const popup = this.popup
     if ($('#tabs .btns h2:first-of-type').css('display') !== 'none') {
@@ -79,7 +79,7 @@ class App extends FinderApp {
 		if (!feature.isCommunityBoard) {
 			this.map.once('moveend', () => {
 				const panIntoView = popup.panIntoView
-				popup.panIntoView = () => {}
+				popup.panIntoView = App.noPanIntoView
 				popup.showFeature(feature)
 				popup.panIntoView = panIntoView
 			})
@@ -218,7 +218,7 @@ class App extends FinderApp {
     return options
   }
 }
-
+App.noPanIntoView = () => {}
 App.getSplashOptions = (search) => {
 	if (search.indexOf('splash=false') === -1) {
 		return {
