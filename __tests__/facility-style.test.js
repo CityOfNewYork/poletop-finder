@@ -1,4 +1,4 @@
-import {poleFeature, cbFeature} from './test-features'
+import {poleFeature1, cbFeature} from './test-features'
 import facilityStyle from '../src/js/facility-style'
 import Circle from 'ol/style/Circle'
 import Icon from 'ol/style/Icon'
@@ -7,9 +7,9 @@ import Text from 'ol/style/Text'
 
 test('style - pole, feature not installed', () => {
   expect.assertions(4)
-  poleFeature.set('equipment_installed_yes_no', 'N')
+  poleFeature1.set('equipment_installed_yes_no', 'N')
 
-  const style = facilityStyle.style(poleFeature, 305.748113140705)
+  const style = facilityStyle.style(poleFeature1, 305.748113140705)
   expect(style[0].getImage() instanceof Circle).toBe(true)
   expect(style[0].getImage().getStroke().getColor()).toBe('#fff')
   expect(style[0].getImage().getFill().getColor()).toBe('rgba(46,107,164,.7)')
@@ -17,9 +17,9 @@ test('style - pole, feature not installed', () => {
 })
 test('style - pole, feature installed', () => {
   expect.assertions(5)
-  poleFeature.set('equipment_installed_yes_no', 'Y')
+  poleFeature1.set('equipment_installed_yes_no', 'Y')
 
-  const style = facilityStyle.style(poleFeature, 305.748113140705)
+  const style = facilityStyle.style(poleFeature1, 305.748113140705)
   expect(style[1].getImage() instanceof Icon).toBe(true)
   expect(style[1].getImage().getSrc()).toBe('img/signal.svg')
   expect(style[1].getImage().getImageSize()).toEqual([512, 512])
@@ -43,7 +43,7 @@ test('style - community board', () => {
 test('highlightStyle', () => {
   expect.assertions(4)
 
-  const style = facilityStyle.highLightStyle(poleFeature, 305.748113140705)
+  const style = facilityStyle.highLightStyle(poleFeature1, 305.748113140705)
   expect(style.getImage() instanceof Circle).toBe(true)
   expect(style.getImage().getStroke().getColor()).toBe('#F8951D')
   expect(style.getImage().getStroke().getWidth()).toBe(5)
@@ -69,11 +69,11 @@ test('getRadius - pole', () => {
   expect.assertions(6)
 
   //zoom levels: 18, 17, 16, 15, 14
-  expect(facilityStyle.getRadius(poleFeature, 0.5971642834779395)).toBe(19)
-  expect(facilityStyle.getRadius(poleFeature, 1.194328566955879)).toBe(16)
-  expect(facilityStyle.getRadius(poleFeature, 2.388657133911758)).toBe(13)
-  expect(facilityStyle.getRadius(poleFeature, 4.777314267823516)).toBe(10)
-  expect(facilityStyle.getRadius(poleFeature, 9.554628535647032)).toBe(7)
+  expect(facilityStyle.getRadius(poleFeature1, 0.5971642834779395)).toBe(19)
+  expect(facilityStyle.getRadius(poleFeature1, 1.194328566955879)).toBe(16)
+  expect(facilityStyle.getRadius(poleFeature1, 2.388657133911758)).toBe(13)
+  expect(facilityStyle.getRadius(poleFeature1, 4.777314267823516)).toBe(10)
+  expect(facilityStyle.getRadius(poleFeature1, 9.554628535647032)).toBe(7)
   //zoom < CLUSTER_CUTOFF_ZOOM
-  expect(facilityStyle.getRadius(poleFeature, 19.109257071294063)).toBe(7)
+  expect(facilityStyle.getRadius(poleFeature1, 19.109257071294063)).toBe(7)
 })

@@ -1,5 +1,5 @@
 import Feature from 'ol/Feature'
-import {poleFeature, cbFeature} from './test-features'
+import {poleFeature1, cbFeature} from './test-features'
 import decorations from '../src/js/decorations'
 import ReplaceTokens from 'nyc-lib/nyc/ReplaceTokens'
 
@@ -103,12 +103,12 @@ describe('pole', () => {
         return '<p>Details collapsible</p>'
       }
     }
-    $.extend(poleFeature, extendedDecorations)
+    $.extend(poleFeature1, extendedDecorations)
   })
   test('extendFeature', () => {
     expect.assertions(1)
-    poleFeature.extendFeature()
-    expect(poleFeature.replace).toBe(new ReplaceTokens().replace)
+    poleFeature1.extendFeature()
+    expect(poleFeature1.replace).toBe(new ReplaceTokens().replace)
   })
   test('cssClass', () => {
     expect.assertions(2)
@@ -116,28 +116,28 @@ describe('pole', () => {
     expect(Object.assign(new Feature({'equipment_installed_yes_no': 'N'}), decorations.pole).cssClass()).toBe('equipment_installed_no')
   })
   test('html', () => {
-    const div = $('<div></div>').html(poleFeature.html())
+    const div = $('<div></div>').html(poleFeature1.html())
     expect(div.html()).toBe('<div class="facility equipment_installed_yes" data-fid="1"><p>A Distance</p><p>A Name</p><p>A Distance</p><p>An Address</p><div><strong>Community Board: </strong>5</div><div><strong>Council District: </strong>100</div><p>Map</p><p>Details collapsible</p></div>')
   })
   test('getFranchisee', () => {
     expect.assertions(1)
-    expect(poleFeature.getFranchisee()).toBe('franchisee')
+    expect(poleFeature1.getFranchisee()).toBe('franchisee')
   })
   test('getName', () => {
     expect.assertions(1)
-    expect(poleFeature.getName()).toBe('Poletop Reservation ID 1')
+    expect(poleFeature1.getName()).toBe('Poletop Reservation ID 1')
   })
   test('getAddress1', () => {
     expect.assertions(1)
-    expect(poleFeature.getAddress1()).toBe('Ave P')
+    expect(poleFeature1.getAddress1()).toBe('Ave P')
   })
   test('getAddress2', () => {
     expect.assertions(1)
-    expect(poleFeature.getAddress2()).toBe('Between W 9th St and W 10th St')
+    expect(poleFeature1.getAddress2()).toBe('Between W 9th St and W 10th St')
   })
   test('getCityStateZip', () => {
     expect.assertions(1)
-    expect(poleFeature.getCityStateZip()).toBe('Brooklyn, NY ZIP')
+    expect(poleFeature1.getCityStateZip()).toBe('Brooklyn, NY ZIP')
   })
   test('getPoleType', () => {
     expect.assertions(2)
@@ -154,47 +154,47 @@ describe('pole', () => {
   })
   test('getCouncilDistrict', () => {
     expect.assertions(1)
-    expect(poleFeature.getCouncilDistrict()).toBe('100')
+    expect(poleFeature1.getCouncilDistrict()).toBe('100')
   })
   test('reservationDate', () => {
     expect.assertions(1)
 
-    expect(poleFeature.reservationDate()).toBe('12/29/2017')
+    expect(poleFeature1.reservationDate()).toBe('12/29/2017')
   })
   describe('detailsHtml', () => {
     let ul
     beforeEach(() => {
       ul = $('<ul></ul>')
-      .append(`<li><strong>Ownership: </strong>${poleFeature.getPoleType()}</li>`)
-		  .append(`<li><strong>Franchisee: </strong>${poleFeature.getFranchisee()}</li>`)
-		  .append(`<li><strong>Franchise Contract Zone: </strong>${poleFeature.getZone()}</li>`)
-      .append(`<li><strong>Reservation Date: </strong>${poleFeature.reservationDate()}</li>`)
+      .append(`<li><strong>Ownership: </strong>${poleFeature1.getPoleType()}</li>`)
+		  .append(`<li><strong>Franchisee: </strong>${poleFeature1.getFranchisee()}</li>`)
+		  .append(`<li><strong>Franchise Contract Zone: </strong>${poleFeature1.getZone()}</li>`)
+      .append(`<li><strong>Reservation Date: </strong>${poleFeature1.reservationDate()}</li>`)
     })
     afterEach(() => {
-      poleFeature.set('park_advisory', 'park_advisory')
-      poleFeature.set('historic_advisory', 'historic_advisory')
-      poleFeature.set('scenic_landmark_advisory', 'scenic_landmark_advisory')
-      poleFeature.set('bid_advisory', 'bid_advisory')
-      poleFeature.set('school_advisory', 'school_advisory')
-      poleFeature.set('equipment_installed_yes_no', 'Y')
+      poleFeature1.set('park_advisory', 'park_advisory')
+      poleFeature1.set('historic_advisory', 'historic_advisory')
+      poleFeature1.set('scenic_landmark_advisory', 'scenic_landmark_advisory')
+      poleFeature1.set('bid_advisory', 'bid_advisory')
+      poleFeature1.set('school_advisory', 'school_advisory')
+      poleFeature1.set('equipment_installed_yes_no', 'Y')
     })
 
     test('detailsHtml', () => {
       expect.assertions(1)
-      expect(poleFeature.detailsHtml()).toEqual($('<div></div>').append(ul.append('<li><strong>Construction Status: </strong>Completed</li>')
-      .append($(`<li><strong>Additional Notes: </strong></li>`).append(poleFeature.getAdvisories()))))
+      expect(poleFeature1.detailsHtml()).toEqual($('<div></div>').append(ul.append('<li><strong>Construction Status: </strong>Completed</li>')
+      .append($(`<li><strong>Additional Notes: </strong></li>`).append(poleFeature1.getAdvisories()))))
     })
     test('detailsHtml - no advisories/construction', () => {
       expect.assertions(1)
         
-      poleFeature.set('equipment_installed_yes_no', 'N')
-      poleFeature.set('park_advisory', '')
-      poleFeature.set('historic_advisory', '')
-      poleFeature.set('scenic_landmark_advisory', '')
-      poleFeature.set('bid_advisory', '')
-      poleFeature.set('school_advisory', '')
+      poleFeature1.set('equipment_installed_yes_no', 'N')
+      poleFeature1.set('park_advisory', '')
+      poleFeature1.set('historic_advisory', '')
+      poleFeature1.set('scenic_landmark_advisory', '')
+      poleFeature1.set('bid_advisory', '')
+      poleFeature1.set('school_advisory', '')
   
-      expect(poleFeature.detailsHtml()).toEqual($('<div></div>').append(ul.append('<li><strong>Construction Status: </strong>Approved</li>')))
+      expect(poleFeature1.detailsHtml()).toEqual($('<div></div>').append(ul.append('<li><strong>Construction Status: </strong>Approved</li>')))
   
     })
   })
@@ -218,7 +218,7 @@ describe('pole', () => {
     for(const msg in messages) {
       ul.append(`<li>${messages[msg]}</li>`)
     }
-    expect(poleFeature.getAdvisories()).toEqual(ul)
+    expect(poleFeature1.getAdvisories()).toEqual(ul)
   })
 })
 
