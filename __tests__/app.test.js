@@ -252,14 +252,51 @@ describe('zoomTo', () => {
 
 })
 
-
-test('zoomToArea', () => {
+describe('zoomToArea', () => {
+  let app, button, feature
+  beforeEach(() => {
+    app = new App()
+    app.popup = {hide: jest.fn()}
+    app.zoomTo = jest.fn()
+    feature = new Feature({})
+    button = $('<button></button>')
+    button.data('feature', feature)
+    $('body').append(button)
+  })
+  afterEach(() => {
+    button.remove()
+  })
+  test('zoomToArea', () => {
+    expect.assertions(3)
+    app.zoomToArea({currentTarget: button})
     
+    expect(app.popup.hide).toHaveBeenCalledTimes(1)
+    expect(app.zoomTo).toHaveBeenCalledTimes(1)
+    expect(app.zoomTo.mock.calls[0][0]).toBe(feature)
+  })
 })
 
-test('getUrl', () => {
-    
+
+describe('getUrl', () => {
+  let app
+  beforeEach(() => {
+    app = new App()
+    app.map = {getSize: jest.fn()}
+    app.view = {calculateExtent: jest.fn().mockImplementation(() => { return [1,2,3,4]})}
+  })
+  test('getUrl - none', () => {
+    expect.assertions(1)
+    app.extents = [[1,2,3,4]]
+    expect(app.getUrl()).toBe(undefined)
+  })
+  test('getUrl', () => {
+    expect.assertions(2)
+    expect(app.getUrl()).toBe('https://data.cityofnewyork.us/resource/tbgj-tdd6.csv?&$limit=50000&$where=x_coord%20%3E%2031127809.542809464%20and%20x_coord%20%3C%2031133636.614801683%20and%20y_coord%20%3E%20-2282904.9960003956%20and%20y_coord%20%3C%20-2277075.5967893843')
+    // expect(app.extents).toBe([[1,2,3,4]]) // -- this seems to equal extent after subtracting/adding 500
+    expect(app.view.calculateExtent.mock.calls[0][0]).toBe(app.map.getSize())
+  })
 })
+
 
 describe('createSource', () => {
   const createSource = FinderApp.prototype.createSource

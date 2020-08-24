@@ -101,7 +101,7 @@ class App extends FinderApp {
 			return
 		}
 		this.extents.push(extent)
-	extent[0] = extent[0] - 500
+		extent[0] = extent[0] - 500
 		extent[1] = extent[1] - 500
 		extent[2] = extent[2] + 500
 		extent[3] = extent[3] + 500
