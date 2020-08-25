@@ -533,17 +533,88 @@ test('showPoles', () => {
     
 })
 
-test('srcChange', () => {
-    
+describe('srcChange', () => {
+  let app
+  beforeEach(() => {
+    app = new App()
+    app.source = {_name: 'mockName'}
+    app.resetList = jest.fn()
+    app.highlightSource = {clear: jest.fn()}
+  })
+  test('srcChange', () => {
+    app.srcChange({_name: 'differentSrc'})
+    expect(app.resetList).toHaveBeenCalledTimes(1)
+    expect(app.highlightSource.clear).toHaveBeenCalledTimes(1)
+  })
+  test('srcChange - no change', () => {
+    app.srcChange({_name: 'mockName'})
+    expect(app.resetList).toHaveBeenCalledTimes(0)
+    expect(app.highlightSource.clear).toHaveBeenCalledTimes(0)
+  })
 })
 
-test('resetList', () => {
-    
+
+describe('resetList', () => {
+  let app, mockPopup
+  const resetList = FinderApp.prototype.resetList
+  beforeEach(() => {
+    mockPopup = {hide: jest.fn()}
+    FinderApp.prototype.resetList = jest.fn().mockImplementation(() => {
+      mockPopup.hide() // general behavior of resetlist
+    })
+    app = new App()
+    app.popup = mockPopup
+  })
+  afterEach(() => {
+    FinderApp.prototype.resetList = resetList
+  })
+  test('resetList', () => {
+    expect.assertions(4)
+    app.resetList('event')
+    expect(mockPopup.hide).toHaveBeenCalledTimes(1)    
+    expect(FinderApp.prototype.resetList).toHaveBeenCalledTimes(1)
+    expect(FinderApp.prototype.resetList.mock.calls[0][0]).toBe('event')
+    expect(app.popup.hide).toBe(mockPopup.hide)
+  })
+  test('resetList - src is not community board', () => {
+    expect.assertions(4)
+    app.cdSrc = 'cdSrc'
+    app.resetList('event')
+    expect(mockPopup.hide).toHaveBeenCalledTimes(0)    
+    expect(FinderApp.prototype.resetList).toHaveBeenCalledTimes(1)
+    expect(FinderApp.prototype.resetList.mock.calls[0][0]).toBe('event')
+    expect(app.popup.hide).toBe(mockPopup.hide)
+  })
 })
 
-test('mobileDiaOpts', () => {
-
+describe('mobileDiaOpts', () => {
+  let app, tabName
+  beforeEach(() => {
+    app = new App()
+    app.location = {name: 'locationName', coordinate: [0,1]}
+    app.source = {sort: jest.fn().mockImplementation(() => {
+      return [0,1]
+    })}
+    tabName = $('<div id="tab-btn-1">Locations</div>')
+    $('body').append(tabName)
+  })
+  afterEach(() => {
+    tabName.remove()
+  })
+  test('mobileDiaOpts', () => {
+    let options = {
+      buttonText: [
+        `<span class="msg-vw-list">View ${tabName.text()} list</span>`,
+        '<span class="msg-vw-map">View the map</span>'
+			],
+			message: `<strong>${app.location.name}</strong>`
+    }
+    expect(app.mobileDiaOpts()).toEqual(options)
+    expect(app.source.sort).toHaveBeenCalledTimes(1)
+    expect(app.source.sort.mock.calls[0][0]).toBe(app.location.coordinate)
+  })
 })
+
 
 test('getSplashOptions', () => {
   expect.assertions(2)
