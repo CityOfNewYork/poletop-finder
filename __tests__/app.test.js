@@ -529,9 +529,61 @@ describe('cluster', () => {
   })
 })
 
-test('showPoles', () => {
+describe('showPoles', () => {
+  let app, tabs
+  beforeEach(() => {
+    app = new App()
+    app.poleSrc = {filter: jest.fn(), sort: jest.fn()}
+    app.filters = {getFilters: jest.fn()}
+    app.layer = {setSource: jest.fn()}
+    app.srcChange = jest.fn()
+    app.resetList = jest.fn()
+    tabs = $('<div id="tabs"><div class="btns"><h2></h2><h2></h2></div></div>')
+    $('body').append(tabs)
+    $('#tabs').addClass('no-flt')
+  })
+  afterEach(() => {
+    tabs.remove()
+  })
+  test('showPoles - has location', () => {
+    app.location = {coordinate: 'coord'}
+    let prev = 'prevSrc'
+    app.showPoles(prev)
+
+    expect(app.source).toBe(app.poleSrc)
+    expect($('#tabs').hasClass('no-flt')).toBe(false)
+    expect(app.poleSrc.filter).toHaveBeenCalledTimes(1)
+    expect(app.poleSrc.filter.mock.calls[0][0]).toBe(app.filters.getFilters())
+    expect(app.poleSrc.sort).toHaveBeenCalledTimes(1)
+    expect(app.poleSrc.sort.mock.calls[0][0]).toBe(app.location.coordinate)
+    expect(app.resetList).toHaveBeenCalledTimes(1)
+    expect(app.filters.source).toBe(app.poleSrc)
+    expect(app.layer.setSource).toHaveBeenCalledTimes(1)
+    expect(app.layer.setSource.mock.calls[0][0]).toBe(app.poleSrc)
+    expect(app.srcChange).toHaveBeenCalledTimes(1)
+    expect(app.srcChange.mock.calls[0][0]).toBe(prev)
+
+  })
+  test('showPoles - does not have location', () => {
+    app.location = {coordinate: undefined}
+    let prev = 'prevSrc'
+    app.showPoles(prev)
+
+    expect(app.source).toBe(app.poleSrc)
+    expect($('#tabs').hasClass('no-flt')).toBe(false)
+    expect(app.poleSrc.filter).toHaveBeenCalledTimes(1)
+    expect(app.poleSrc.filter.mock.calls[0][0]).toBe(app.filters.getFilters())
+    expect(app.poleSrc.sort).toHaveBeenCalledTimes(0)
+    expect(app.resetList).toHaveBeenCalledTimes(0)
+    expect(app.filters.source).toBe(app.poleSrc)
+    expect(app.layer.setSource).toHaveBeenCalledTimes(1)
+    expect(app.layer.setSource.mock.calls[0][0]).toBe(app.poleSrc)
+    expect(app.srcChange).toHaveBeenCalledTimes(1)
+    expect(app.srcChange.mock.calls[0][0]).toBe(prev)
     
+  })
 })
+
 
 describe('srcChange', () => {
   let app
@@ -623,3 +675,6 @@ test('getSplashOptions', () => {
   expect(App.getSplashOptions('?splash=false')).toBeUndefined()
 })
 
+test('noPanIntoView', () => {
+  expect(App.noPanIntoView()).toBeUndefined()
+})
