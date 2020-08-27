@@ -22,6 +22,17 @@ const communityBoardCsv = `"community_board","count"
 "306","95"
 "312","70"
 `
+const resizeFn = ()  => {
+  const resizeEvent = document.createEvent('Event');
+  resizeEvent.initEvent('resize', true, true);
+  
+  global.window.resizeTo = (width, height) => {
+    global.window.innerWidth = width || global.window.innerWidth;
+    global.window.innerHeight = width || global.window.innerHeight;
+    global.window.dispatchEvent(resizeEvent);
+  }
+}
+
 
 beforeEach(() => {
   $.resetMocks()
@@ -98,9 +109,105 @@ describe('rearrangeLayers', () => {
   })
 })
 
-test('resizeBanner', () => {
+describe('resizeBanner', () => {
+  const banner = $('<div class="fnd"><h1 id="banner"><div></div></h1></div>')
+  let app
+  beforeAll(() => {
+    resizeFn()
+  })
+  beforeEach(() => {
+    App.prototype.resizeBanner = resizeBanner
+    app = new App()
+    $('body').append(banner)
+  })
+  afterEach(() => {
+    banner.remove()
+  })
+  test('resizeBanner', () => {
+    app.resizeBanner()
+
+    expect($('.fnd #banner').children().length).toBe(2)
+    expect($('.fnd #banner>div').hasClass('.lg-view'))
+    expect($('.fnd #banner>div').hasClass('.sm-view'))
+
+    expect($('.lg-view').html()).toBe('<span>Mobile Telecommunications Poletop Infrastructure Locations</span>')
+    expect($('.sm-view').html()).toBe('<span>Poletop Locations</span>')
+
+    $('.fnd #banner>div').css('font-size', '16px')
     
+    window.resizeTo(500, 1000)
+
+    expect($('.sm-view').css('display')).toBe('none')
+    expect($('.lg-view').css('display')).toBe('block')
+
+    $('.fnd #banner>div').css('font-size', '12px')
+
+    window.resizeTo(500, 1000)
+
+    expect($('.sm-view').css('display')).toBe('block')
+    expect($('.lg-view').css('display')).toBe('none')
+
+    
+    // font-size < 16, sm-view width > sm-view * width, sm-view * height == 18
+    $('.fnd .sm-view').width(100)
+    $('.fnd .sm-view *').width(50)
+    $('.fnd .sm-view *').height(18)
+    $('.fnd #banner *').css('font-size', '15px')
+    window.resizeTo(500, 1000)
+
+    expect($('.fnd #banner>div').css('margin-top')).toBe('5px')
+
+    // font-size < 16, sm-view width < sm-view * width
+    $('.fnd .sm-view').width(50)
+    $('.fnd .sm-view *').width(100)
+    $('.fnd .sm-view *').height(33)
+    $('.fnd #banner *').css('font-size', '15px')
+    window.resizeTo(500, 1000)
+
+    expect($('.fnd #banner>div').css('margin-top')).toBe('0px')
+
+     // font-size < 16, sm-view * height >= 34
+    $('.fnd .sm-view').width(100)
+    $('.fnd .sm-view *').width(50)
+    $('.fnd .sm-view *').height(35)
+    $('.fnd #banner *').css('font-size', '15px')
+    window.resizeTo(500, 1000)
+
+    expect($('.fnd #banner>div').css('margin-top')).toBe('0px')
+
+     // font-size < 16, sm-view width < sm-view * width, sm-view * height >= 34
+    $('.fnd .sm-view').width(50)
+    $('.fnd .sm-view *').width(100)
+    $('.fnd .sm-view *').height(35)
+    $('.fnd #banner *').css('font-size', '14px')
+    window.resizeTo(500, 1000)
+
+    expect($('.fnd #banner>div').css('margin-top')).toBe('0px')
+
+    // font-size >= 16, lg-view * height < 30
+    $('.fnd #banner>div').css('font-size', '19px')
+    $('.fnd .lg-view *').height(29)
+    console.warn($('.fnd .lg-view *').height())
+    
+    window.resizeTo(500, 1000)
+    expect($('.fnd #banner>div').css('margin-top')).toBe('5px')
+  
+    // font-size >= 16, lg-view * height >= 30
+    $('.fnd #banner>div').css('font-size', '19px')
+    $('.fnd .lg-view *').height(30)
+    window.resizeTo(500, 1000)
+    expect($('.fnd #banner>div').css('margin-top')).toBe('0px')
+
+    // font-size > 20
+    $('.fnd #banner>div').css('font-size', '21px')
+    $('.fnd .lg-view *').height(25)
+    window.resizeTo(500, 1000)
+    expect($('.fnd #banner>div').css('margin-top')).toBe('0px')
+
+
+  })
 })
+
 
 describe('zoomTo', () => {
   
