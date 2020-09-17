@@ -9,6 +9,8 @@ import nycOl from 'nyc-lib/nyc/ol'
 
 const IS_IE = window.navigator.userAgent.indexOf("MSIE ")
 const WIFI_ICON = IS_IE != -1 ? 'img/signal.png' :  'img/signal.svg'
+let text = $('<span>&#10004;</span>')
+const checkIcon = text.html()
 
 const getRadius = (feature, resolution) => {
   let radius = 7
@@ -28,7 +30,7 @@ const getRadius = (feature, resolution) => {
     else if (zoom > 14) radius = 10
   }
   return radius
-}
+} 
 
 const style = (feature, resolution) => {
   let radius = getRadius(feature, resolution)
@@ -55,12 +57,22 @@ const style = (feature, resolution) => {
   })]
   if (text) {
     style[0].setText(text)
-  } else if (feature.isInstalled()) {
+  } else if (feature.getStatus() === 'Installed') {
     style.push(new Style({
       image: new Icon({
         src: WIFI_ICON,
         imgSize: [512, 512],
         scale: radius * 1.5 / 512
+      })
+    }))
+  } else if (feature.getStatus() === 'Approved') {
+    style.push(new Style({
+      text: new Text({
+        text: checkIcon,
+        font: `bold ${radius * 1.5}px sans-serif`,
+        fill: new Fill({
+          color: '#fff',
+        })
       })
     }))
   }

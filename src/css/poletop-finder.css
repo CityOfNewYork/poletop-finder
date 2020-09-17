@@ -24,42 +24,93 @@
 .no-flt .btns h2:nth-of-type(3) {
 	display: none;
 }
-.chc-chc.equipment_installed_yes_no label[for=chc-chc-1]::before, .facility.equipment_installed_yes .name::before {
+
+.chc-chc.status label[for=chc-chc-1]::before, .facility.installed .name::before {
 	background-image: url(../img/signal.png);
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: 16px;
 }
+.chc-chc.status label[for=chc-chc-0]::before, .pop .facility.approved .name::before, .facility.approved .name::before {
+	content: '✔' !important;
+	color: white;
+	align-items: center;
+	justify-content: center;
+	left: 0;
+	display: flex !important;
+}
+.pop .facility.approved .name::before, .chc-chc.status label[for=chc-chc-0]::before {
+	position: absolute;
+}
+.facility.approved .name::before {
+	position: unset;
+}
+.pop .facility.approved .name::before {
+	margin: -2px 0px -19px 6px;
+}
 
-.chc-chc.equipment_installed_yes_no label::before,.facility.equipment_installed_yes .name::before, .facility.equipment_installed_no .name::before {
+.translated-rtl .chc-chc.status label[for=chc-chc-0]::before, .translated-rtl .facility.approved .name::before {
+	right: 0;
+}
+.chc-chc.status label[for=chc-chc-0] {
+	padding-left: 24px;
+}
+.chc-chc.status label[for=chc-chc-0]::before {
+	margin: 0 5px 5px 42px;
+}
+.facility.approved .name::before {
+	margin: -1px 0px -19px -21px;
+}
+.chc-chc.status label::before,.facility.installed .name::before, .facility.proposed .name::before {
 	display: inline-block;
+	content: ' ';
+	margin: 0 3px -4px -20px;
+}
+.chc-chc.status label::before,.facility.installed .name::before, .facility.proposed .name::before, .facility.approved .name::before {
 	width: 18px;
 	height: 18px;
 	border: 1px solid #fff;
-	content: ' ';
 	border-radius: 50%;
-	margin: 0 3px -4px -20px;
 	background-color: rgba(46,107,164,.7);
 }
 .translated-rtl #filters label::before {
 	margin: 0px -6px -4px 2px;
 	float: initial;
 }
-.facility.equipment_installed_yes .name, .facility.equipment_installed_no .name {
+.translated-rtl #filters label[for=chc-chc-0]::before {
+	margin: 2px 42px -4px 2px;
+	float: initial;
+}
+.facility.installed .name, .facility.proposed .name, .facility.approved .name {
 	padding-left: 18px;
 }
-.chc-chc.equipment_installed_yes_no label {
+.chc-chc.status label {
 	padding-left: 21px;
 }
-.translated-rtl .chc-chc.equipment_installed_yes_no label {
+.translated-rtl .chc-chc.status label {
 	padding-right: 7px;
 }
-.translated-rtl .chc-chc.equipment_installed_yes_no label::before,.translated-rtl .facility.equipment_installed_no .name::before,.translated-rtl .facility.equipment_installed_yes .name::before {
+.translated-rtl .chc-chc.status label[for=chc-chc-0] {
+	padding-right: 24px;
+}
+.translated-rtl .chc-chc.status label::before,.translated-rtl .facility.proposed .name::before,.translated-rtl .facility.installed .name::before, .translated-rtl .facility.approved .name::before {
 	float: right;
-	margin: 0 3px -4px 0px;
+	margin: -1px -1px -4px 2px;
+}
+.translated-rtl .pop .facility.approved .name::before {
+	float: right;
+	margin: -1px 8px -4px 2px;
+}
+.translated-rtl .pop .facility.proposed .name::before,.translated-rtl .pop .facility.installed .name::before {
+	float: right;
+	margin: -1px -2px -4px 2px;
 }
 .translated-rtl .pop>.content .name {
 	padding-right: unset;
+	padding-left: unset;
+}
+.translated-rtl .pop>.content .facility.approved .name {
+	padding-right: 20px;
 	padding-left: unset;
 }
 .community-board .pop .content {

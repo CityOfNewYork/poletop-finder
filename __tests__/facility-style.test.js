@@ -7,7 +7,7 @@ import Text from 'ol/style/Text'
 
 test('style - pole, feature not installed', () => {
   expect.assertions(4)
-  poleFeature1.set('equipment_installed_yes_no', 'N')
+  poleFeature1.set('status', 'Proposed')
 
   const style = facilityStyle.style(poleFeature1, 305.748113140705)
   expect(style[0].getImage() instanceof Circle).toBe(true)
@@ -17,7 +17,18 @@ test('style - pole, feature not installed', () => {
 })
 test('style - pole, feature installed', () => {
   expect.assertions(5)
-  poleFeature1.set('equipment_installed_yes_no', 'Y')
+  poleFeature1.set('status', 'Approved')
+
+  const style = facilityStyle.style(poleFeature1, 305.748113140705)
+  expect(style[1].getText() instanceof Text).toBe(true)
+  expect(style[1].getText().getText()).toBe($('<span>&#10004;</span>').html())
+  expect(style[1].getText().getFont()).toBe('bold 10.5px sans-serif')
+  expect(style[1].getText().getFill() instanceof Fill).toBe(true)
+  expect(style[1].getText().getFill().getColor()).toBe('#fff')
+})
+test('style - pole, feature installed', () => {
+  expect.assertions(5)
+  poleFeature1.set('status', 'Installed')
 
   const style = facilityStyle.style(poleFeature1, 305.748113140705)
   expect(style[1].getImage() instanceof Icon).toBe(true)

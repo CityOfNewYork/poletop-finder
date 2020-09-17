@@ -59,7 +59,7 @@ const pole = {
     this.replace = new ReplaceTokens().replace
 	},
 	cssClass() {
-		return this.isInstalled() ? 'equipment_installed_yes' : 'equipment_installed_no'
+		return this.getStatus().toLowerCase()
 	},
 	html() {
 	return $(`<div class="facility" data-fid="${this.getId()}"></div>`)
@@ -114,23 +114,21 @@ const pole = {
 		const ul = $('<ul></ul>')
 
 		const advisories = this.getAdvisories()
+		const status = this.getStatus()
 		
 		ul.append(`<li><strong>Ownership: </strong>${this.getPoleType()}</li>`)
 		ul.append(`<li><strong>Franchisee: </strong>${this.getFranchisee()}</li>`)
 		ul.append(`<li><strong>Franchise Contract Zone: </strong>${this.getZone()}</li>`)
 		ul.append(`<li><strong>Reservation Date: </strong>${this.reservationDate()}</li>`)
-		if (this.isInstalled()) {
-			ul.append('<li><strong>Construction Status: </strong>Completed</li>')
-		} else {
-			ul.append('<li><strong>Construction Status: </strong>Approved</li>')
-		}
+		ul.append(`<li><strong>Construction Status: </strong>${status}</li>`)
+		
 		if (advisories) {
 			ul.append($(`<li><strong>Additional Notes: </strong></li>`).append(this.getAdvisories()))
 		}
 		return $('<div></div>').append(ul)
 	},
-	isInstalled() {
-		return this.get('equipment_installed_yes_no') === 'Y'
+	getStatus() {
+		return this.get('status')
 	},
 	getAdvisories() {
 		const messages = {

@@ -64,8 +64,9 @@ test('constructor', () => {
     filterChoiceOptions: [{
       title: 'Construction Status',
       choices: [
-        {name: 'equipment_installed_yes_no', values: ['N'], label: 'Approved', checked: true},
-        {name: 'equipment_installed_yes_no', values: ['Y'], label: 'Completed', checked: true}
+        {name: 'status', values: ['Approved'], label: 'Approved', checked: true},
+        {name: 'status', values: ['Installed'], label: 'Installed', checked: true},
+        {name: 'status', values: ['Proposed'], label: 'Proposed', checked: true}
       ]
     }]
   })
@@ -187,7 +188,6 @@ describe('resizeBanner', () => {
     // font-size >= 16, lg-view * height < 30
     $('.fnd #banner>div').css('font-size', '19px')
     $('.fnd .lg-view *').height(29)
-    console.warn($('.fnd .lg-view *').height())
     
     window.resizeTo(500, 1000)
     expect($('.fnd #banner>div').css('margin-top')).toBe('5px')

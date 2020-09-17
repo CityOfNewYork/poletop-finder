@@ -31,8 +31,9 @@ class App extends FinderApp {
 			filterChoiceOptions: [{
 				title: 'Construction Status',
 				choices: [
-					{name: 'equipment_installed_yes_no', values: ['N'], label: 'Approved', checked: true},
-					{name: 'equipment_installed_yes_no', values: ['Y'], label: 'Completed', checked: true}
+					{name: 'status', values: ['Approved'], label: 'Approved', checked: true},
+					{name: 'status', values: ['Installed'], label: 'Installed', checked: true},
+					{name: 'status', values: ['Proposed'], label: 'Proposed', checked: true}
 				]
 			}]
     })

@@ -111,13 +111,14 @@ describe('pole', () => {
     expect(poleFeature1.replace).toBe(new ReplaceTokens().replace)
   })
   test('cssClass', () => {
-    expect.assertions(2)
-    expect(Object.assign(new Feature({'equipment_installed_yes_no': 'Y'}), decorations.pole).cssClass()).toBe('equipment_installed_yes')
-    expect(Object.assign(new Feature({'equipment_installed_yes_no': 'N'}), decorations.pole).cssClass()).toBe('equipment_installed_no')
+    expect.assertions(3)
+    expect(Object.assign(new Feature({'status': 'Proposed'}), decorations.pole).cssClass()).toBe('proposed')
+    expect(Object.assign(new Feature({'status': 'Installed'}), decorations.pole).cssClass()).toBe('installed')
+    expect(Object.assign(new Feature({'status': 'Approved'}), decorations.pole).cssClass()).toBe('approved')
   })
   test('html', () => {
     const div = $('<div></div>').html(poleFeature1.html())
-    expect(div.html()).toBe('<div class="facility equipment_installed_yes" data-fid="1"><p>A Distance</p><p>A Name</p><p>A Distance</p><p>An Address</p><div><strong>Community Board: </strong>5</div><div><strong>Council District: </strong>100</div><p>Map</p><p>Details collapsible</p></div>')
+    expect(div.html()).toBe('<div class="facility proposed" data-fid="1"><p>A Distance</p><p>A Name</p><p>A Distance</p><p>An Address</p><div><strong>Community Board: </strong>5</div><div><strong>Council District: </strong>100</div><p>Map</p><p>Details collapsible</p></div>')
   })
   test('getFranchisee', () => {
     expect.assertions(1)
@@ -176,18 +177,18 @@ describe('pole', () => {
       poleFeature1.set('scenic_landmark_advisory', 'scenic_landmark_advisory')
       poleFeature1.set('bid_advisory', 'bid_advisory')
       poleFeature1.set('school_advisory', 'school_advisory')
-      poleFeature1.set('equipment_installed_yes_no', 'Y')
+      poleFeature1.set('status', 'Proposed')
     })
 
     test('detailsHtml', () => {
       expect.assertions(1)
-      expect(poleFeature1.detailsHtml()).toEqual($('<div></div>').append(ul.append('<li><strong>Construction Status: </strong>Completed</li>')
+      expect(poleFeature1.detailsHtml()).toEqual($('<div></div>').append(ul.append('<li><strong>Construction Status: </strong>Proposed</li>')
       .append($(`<li><strong>Additional Notes: </strong></li>`).append(poleFeature1.getAdvisories()))))
     })
     test('detailsHtml - no advisories/construction', () => {
       expect.assertions(1)
         
-      poleFeature1.set('equipment_installed_yes_no', 'N')
+      poleFeature1.set('status', 'Approved')
       poleFeature1.set('park_advisory', '')
       poleFeature1.set('historic_advisory', '')
       poleFeature1.set('scenic_landmark_advisory', '')
@@ -199,10 +200,11 @@ describe('pole', () => {
     })
   })
  
-  test('isInstalled', () => {
-    expect.assertions(2)
-    expect(Object.assign(new Feature({'equipment_installed_yes_no': 'Y'}), decorations.pole).isInstalled()).toBe(true)
-    expect(Object.assign(new Feature({'equipment_installed_yes_no': 'N'}), decorations.pole).isInstalled()).toBe(false)
+  test('getStatus', () => {
+    expect.assertions(3)
+    expect(Object.assign(new Feature({'status': 'Proposed'}), decorations.pole).getStatus()).toBe('Proposed')
+    expect(Object.assign(new Feature({'status': 'Installed'}), decorations.pole).getStatus()).toBe('Installed')
+    expect(Object.assign(new Feature({'status': 'Approved'}), decorations.pole).getStatus()).toBe('Approved')
     
   })
   test('getAdvisories', () => {
