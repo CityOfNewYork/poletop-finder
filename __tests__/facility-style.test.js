@@ -15,16 +15,16 @@ test('style - pole, feature not installed', () => {
   expect(style[0].getImage().getFill().getColor()).toBe('rgba(46,107,164,.7)')
   expect(style.length).toBe(1)
 })
-test('style - pole, feature installed', () => {
+test('style - pole, feature approved', () => {
   expect.assertions(5)
   poleFeature1.set('status', 'Approved')
 
   const style = facilityStyle.style(poleFeature1, 305.748113140705)
-  expect(style[1].getText() instanceof Text).toBe(true)
-  expect(style[1].getText().getText()).toBe($('<span>&#10004;</span>').html())
-  expect(style[1].getText().getFont()).toBe('bold 10.5px sans-serif')
-  expect(style[1].getText().getFill() instanceof Fill).toBe(true)
-  expect(style[1].getText().getFill().getColor()).toBe('#fff')
+  expect(style[1].getImage() instanceof Icon).toBe(true)
+  expect(style[1].getImage().getSrc()).toBe('img/check_mark.svg')
+  expect(style[1].getImage().getImageSize()).toEqual([270, 270])
+  expect(style[1].getImage().getScale()).toBe(0.03888888888888889)
+  expect(style.length).toBe(2)
 })
 test('style - pole, feature installed', () => {
   expect.assertions(5)

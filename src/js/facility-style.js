@@ -9,8 +9,7 @@ import nycOl from 'nyc-lib/nyc/ol'
 
 const IS_IE = window.navigator.userAgent.indexOf("MSIE ")
 const WIFI_ICON = IS_IE != -1 ? 'img/signal.png' :  'img/signal.svg'
-let text = $('<span>&#10004;</span>')
-const checkIcon = text.html()
+const CHECK_ICON = IS_IE != -1 ? 'img/check_mark.png' :  'img/check_mark.svg'
 
 const getRadius = (feature, resolution) => {
   let radius = 7
@@ -67,12 +66,10 @@ const style = (feature, resolution) => {
     }))
   } else if (feature.getStatus() === 'Approved') {
     style.push(new Style({
-      text: new Text({
-        text: checkIcon,
-        font: `bold ${radius * 1.5}px sans-serif`,
-        fill: new Fill({
-          color: '#fff',
-        })
+      image: new Icon({
+        src: CHECK_ICON,
+        imgSize: [270, 270],
+        scale: radius * 1.5 / 270
       })
     }))
   }

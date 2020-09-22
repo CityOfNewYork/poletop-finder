@@ -31,54 +31,29 @@
 	background-position: center;
 	background-size: 16px;
 }
-.chc-chc.status label[for=chc-chc-1]::before, .pop .facility.approved .name::before, .facility.approved .name::before {
-	content: '✔' !important;
-	color: white;
-	align-items: center;
-	justify-content: center;
-	left: 0;
-	display: flex !important;
-}
-.pop .facility.approved .name::before, .chc-chc.status label[for=chc-chc-1]::before {
-	position: absolute;
-}
-.facility.approved .name::before {
-	position: unset;
-}
-.pop .facility.approved .name::before {
-	margin: -2px 0px -19px 6px;
-}
-
-.translated-rtl .chc-chc.status label[for=chc-chc-1]::before, .translated-rtl .facility.approved .name::before {
-	right: 0;
-}
-.chc-chc.status label[for=chc-chc-1] {
-	padding-left: 24px;
-}
-.chc-chc.status label[for=chc-chc-1]::before {
-	margin: 0 5px 5px 42px;
-}
-.facility.approved .name::before {
-	margin: -1px 0px -19px -21px;
-}
-.chc-chc.status label::before,.facility.installed .name::before, .facility.proposed .name::before {
-	display: inline-block;
-	content: ' ';
-	margin: 0 3px -4px -20px;
+.chc-chc.status label[for=chc-chc-1]::before, .facility.approved .name::before {
+	background-image: url(../img/check_mark.svg);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 16px;
 }
 .chc-chc.status label::before,.facility.installed .name::before, .facility.proposed .name::before, .facility.approved .name::before {
+	display: inline-block;
+	content: ' ';
 	width: 18px;
 	height: 18px;
 	border: 1px solid #fff;
 	border-radius: 50%;
 	background-color: rgba(46,107,164,.7);
 }
-.translated-rtl #filters label::before {
-	margin: 0px -6px -4px 2px;
-	float: initial;
+.facility.installed .name::before, .facility.proposed .name::before, .facility.approved .name::before {
+	margin: 0 3px -4px -20px;
 }
-.translated-rtl #filters label[for=chc-chc-1]::before {
-	margin: 2px 42px -4px 2px;
+#filters label::before {
+	margin: 2px 5px -4px -24px;
+}
+.translated-rtl #filters label::before {
+	margin: 0px -6px -4px 8px;
 	float: initial;
 }
 .facility.installed .name, .facility.proposed .name, .facility.approved .name {
@@ -90,27 +65,17 @@
 .translated-rtl .chc-chc.status label {
 	padding-right: 7px;
 }
-.translated-rtl .chc-chc.status label[for=chc-chc-1] {
-	padding-right: 24px;
-}
 .translated-rtl .chc-chc.status label::before,.translated-rtl .facility.proposed .name::before,.translated-rtl .facility.installed .name::before, .translated-rtl .facility.approved .name::before {
 	float: right;
 	margin: -1px -1px -4px 2px;
 }
-.translated-rtl .pop .facility.approved .name::before {
-	float: right;
-	margin: -1px 8px -4px 2px;
-}
-.translated-rtl .pop .facility.proposed .name::before,.translated-rtl .pop .facility.installed .name::before {
+
+.translated-rtl .pop .facility.proposed .name::before,.translated-rtl .pop .facility.installed .name::before, .translated-rtl .pop .facility.approved .name::before {
 	float: right;
 	margin: -1px -2px -4px 2px;
 }
 .translated-rtl .pop>.content .name {
 	padding-right: unset;
-	padding-left: unset;
-}
-.translated-rtl .pop>.content .facility.approved .name {
-	padding-right: 20px;
 	padding-left: unset;
 }
 .community-board .pop .content {
