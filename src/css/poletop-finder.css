@@ -81,11 +81,6 @@
 .community-board .pop .content {
 	width: 290px;
 }
-/* fix in nyc-lib */
-.fnd .splash a.btn.rad-all.btn-yes {
-	width: 245px !important;
-	padding-left: 35px;
-}
 .tabs button.btn.active:focus, .tabs button.btn.active:focus * {
 	background-color: var(--focus-ring-color);
 	color: black;
@@ -99,18 +94,6 @@
 	overflow: auto;
 	border: 1px solid #fff;
 }
-.sm-view, .sm-view * {
-	font-size: 16px !important;
-}
-.fnd #banner>div {
-    margin-right: 34px;
-	overflow: hidden;
-	height: 31px;
-}
-html[lang="ur"] .fnd #banner>div {
-    margin-right: 34px;
-}
-
 .chc-chc input {
 	-webkit-appearance: none;
 }
@@ -125,15 +108,5 @@ html[lang="ur"] .fnd #banner>div {
 		width: calc(100% - 18px);
 		bottom: 0;
 		left: 0;
-	}
-}
-/* responsive banner */
-@media only screen and (max-width: 1020px) {
-	.fnd #banner>div {
-		line-height: 1;
-		margin: 5px 34px 3px 5px;
-	}
-	.fnd #banner, .fnd #banner * {
-		font-size: 2vw;
 	}
 }
